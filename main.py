@@ -13,6 +13,7 @@ File layout (top to bottom):
 
 import html
 import io
+import re
 import zipfile
 
 import streamlit as st
@@ -35,67 +36,109 @@ st.set_page_config(
 # medium of a resource is readable at a glance.
 # ---------------------------------------------------------------------------
 MODALITY_COLORS = {
-    "Written": "#324A5F",
-    "Visual": "#1F7A8C",
-    "Audio": "#A8620F",
+    "Written": "#4B3A7A",
+    "Visual": "#16807A",
+    "Audio": "#B8453A",
     "Video": "#8A3B5E",
     "Interactive": "#3F7D4E",
 }
 
 CSS = """
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
-/* Page background and body text */
-.stApp { background: #F5F7FA; }
-.block-container { max-width: 1100px; padding-top: 2rem; }
-[data-testid="stMarkdownContainer"] { font-family: 'IBM Plex Sans', system-ui, sans-serif; }
+/* Design tokens: brand palette, 4px-based spacing scale, corner radius */
+:root {
+  --plum: #2D1E4F; --plum-soft: #4B3A7A; --coral: #FF6B5B; --coral-hover: #FF8274;
+  --teal: #1FA39A; --lavender: #F6F3FC; --ink: #1E1533; --muted: #5A5170; --line: #E3DCF3;
+  --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px; --s7: 48px; --radius: 14px;
+}
 
-/* Headings use a serif face for an academic feel */
-h1, h2, h3, h4, h5 { font-family: 'Newsreader', Georgia, serif !important; color: #16213E; letter-spacing: -0.01em; }
+/* Page, text, and headings */
+.stApp { background: #FFFFFF; color: var(--ink); }
+[data-testid="stHeader"] { background: transparent; }
+.block-container, [data-testid="stMainBlockContainer"] { max-width: 1120px; padding: var(--s6) var(--s5) var(--s7); }
+[data-testid="stMarkdownContainer"], [data-testid="stWidgetLabel"], [data-testid="stCaptionContainer"] { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
+[data-testid="stMarkdownContainer"] p, [data-testid="stMarkdownContainer"] li { color: var(--ink); line-height: 1.6; }
+[data-testid="stCaptionContainer"] { color: var(--muted); }
+h1, h2, h3, h4, h5 { font-family: 'Fraunces', Georgia, serif !important; color: var(--plum); letter-spacing: -0.01em; }
+.stApp h1 { font-size: clamp(1.9rem, 1.4rem + 2vw, 2.6rem) !important; font-weight: 700; }
+.stApp h2 { font-size: clamp(1.4rem, 1.2rem + 1vw, 1.8rem) !important; margin-top: var(--s5); }
+.stApp h3.res-title { font-size: 1.25rem !important; padding: 0 !important; margin: 0 0 var(--s2); }
+.lead { color: var(--muted) !important; font-size: 1.05rem; max-width: 70ch; margin-bottom: var(--s5); }
 
-/* Sidebar: dark ink background with light text */
-[data-testid="stSidebar"] { background: #16213E; }
-[data-testid="stSidebar"] p, [data-testid="stSidebar"] label, [data-testid="stSidebar"] span { color: #D6DEE8; }
-.brand { font-family: 'Newsreader', Georgia, serif; font-size: 1.6rem; font-weight: 700; color: #FFFFFF; line-height: 1.15; }
-.tagline { color: #AEBBCB; font-size: .9rem; margin: .4rem 0 1.2rem; }
+/* Sidebar: lavender, logo, and navigation links */
+[data-testid="stSidebar"] { background: var(--lavender); border-right: 1px solid var(--line); }
+[data-testid="stSidebar"] .logo-row { display: flex; align-items: center; gap: var(--s3); margin: var(--s2) 0 var(--s5); }
+[data-testid="stSidebar"] .logo { position: relative; width: 44px; height: 44px; flex: none; border-radius: 12px; background: var(--plum); color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-family: 'Fraunces', Georgia, serif; font-weight: 700; font-size: 1.1rem; }
+[data-testid="stSidebar"] .logo::after { content: ""; position: absolute; right: -4px; bottom: -4px; width: 14px; height: 14px; border-radius: 50%; background: var(--coral); border: 2px solid var(--lavender); }
+[data-testid="stSidebar"] .brand { font-family: 'Fraunces', Georgia, serif; font-size: 1.2rem; font-weight: 700; color: var(--plum); line-height: 1.15; }
+[data-testid="stSidebar"] .tagline { font-size: .85rem; color: var(--muted); margin-top: 2px; }
+[data-testid="stSidebar"] [data-testid="stRadio"] [role="radiogroup"] { gap: 4px; }
+[data-testid="stSidebar"] [data-testid="stRadio"] label { width: 100%; padding: 10px 14px; border-radius: 10px; cursor: pointer; }
+[data-testid="stSidebar"] [data-testid="stRadio"] label p { font-weight: 600; color: var(--plum); }
+[data-testid="stSidebar"] [data-testid="stRadio"] label:hover { background: #EBE5F8; }
+[data-testid="stSidebar"] [data-testid="stRadio"] label:has(input:checked) { background: var(--plum); }
+[data-testid="stSidebar"] [data-testid="stRadio"] label:has(input:checked) p { color: #FFFFFF; }
+[data-testid="stSidebar"] [data-testid="stCaptionContainer"] { color: var(--muted); }
 
-/* Home hero banner and modality strip */
-.hero { background: #16213E; border-radius: 6px; padding: 2rem 2.25rem 1.5rem; margin-bottom: 1.25rem; }
-.hero-title { font-family: 'Newsreader', Georgia, serif; font-size: 2.3rem; line-height: 1.15; color: #FFFFFF; margin-bottom: .6rem; }
-.hero p { color: #C9D3DF; max-width: 62ch; line-height: 1.55; margin: 0; }
-.strip { display: flex; gap: 4px; margin-top: 1.4rem; flex-wrap: wrap; }
-.strip div { flex: 1 1 110px; padding: .6rem .8rem; color: #FFFFFF; font-size: .9rem; border-radius: 3px; }
-.strip b { display: block; font-family: 'Newsreader', Georgia, serif; font-size: 1.6rem; }
+/* Hero banner (Home) */
+.hero { background: radial-gradient(circle at 88% 16%, rgba(255,107,91,.55), transparent 38%), radial-gradient(circle at 100% 100%, rgba(31,163,154,.45), transparent 34%), var(--plum); border-radius: 20px; padding: clamp(24px, 5vw, 56px); margin-bottom: var(--s4); }
+.stApp h1.hero-title { font-size: clamp(1.8rem, 1.2rem + 2.6vw, 3rem) !important; line-height: 1.12; color: #FFFFFF !important; max-width: 20ch; margin: 0 0 var(--s3); padding: 0; }
+.hero p { color: #E6DFF5 !important; font-size: 1.05rem; max-width: 56ch; margin: 0; }
+.chips { display: flex; flex-wrap: wrap; gap: var(--s3); margin-top: var(--s5); }
+.chip { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.3); border-radius: 12px; padding: var(--s2) var(--s4); color: #FFFFFF; font-size: .95rem; }
+.chip b { font-family: 'Fraunces', Georgia, serif; font-size: 1.5rem; margin-right: var(--s2); }
 
-/* Content cards */
-.card { background: #FFFFFF; border: 1px solid #D9E0E7; border-left: 6px solid var(--accent, #1F7A8C); border-radius: 4px; padding: 1rem 1.25rem; margin-bottom: .75rem; }
-.card-title { font-family: 'Newsreader', Georgia, serif; font-size: 1.2rem; font-weight: 700; color: #16213E; margin-bottom: .2rem; }
-.card .meta { font-size: .85rem; color: #5B6877; margin-bottom: .5rem; }
-.card p { color: #3A4756; line-height: 1.55; margin: 0 0 .6rem; }
-.pill { display: inline-block; background: #E8EEF3; color: #2B3A4B; border-radius: 999px; padding: 2px 10px; font-size: .85rem; margin: 0 6px 4px 0; }
+/* Cards and panels (keyed containers) */
+[class*="st-key-card_"] { background: var(--lavender) !important; border: 1px solid var(--line) !important; border-radius: var(--radius) !important; padding: var(--s5) !important; gap: var(--s3) !important; box-shadow: 0 1px 2px rgba(45,30,79,.06), 0 6px 18px rgba(45,30,79,.05); transition: box-shadow .15s ease; }
+[class*="st-key-card_"]:hover { box-shadow: 0 2px 4px rgba(45,30,79,.08), 0 10px 24px rgba(45,30,79,.1); }
+[class*="st-key-panel_"] { background: var(--lavender) !important; border: 1px solid var(--line) !important; border-radius: var(--radius) !important; padding: var(--s5) !important; }
+@media (prefers-reduced-motion: reduce) { [class*="st-key-card_"] { transition: none; } }
 
-.badge { display: inline-block; color: #FFFFFF; border-radius: 3px; padding: 2px 8px; font-size: .85rem; font-weight: 600; margin-bottom: .3rem; }
-
-/* Heading sizes that keep a logical order: h1 page, h2 section, h3 card */
-.stApp h2 { font-size: 1.6rem !important; }
-.stApp h3.res-title { font-size: 1.25rem !important; padding: 0 !important; margin: 0 0 .4rem; }
-
-/* Clearly visible keyboard focus for buttons, inputs, menus, and expanders */
-.stApp button:focus-visible, .stApp input:focus-visible, .stApp [role="combobox"]:focus-visible, .stApp summary:focus-visible { outline: 3px solid #0B57D0 !important; outline-offset: 2px; }
-
-/* Exemplar thumbnail placeholder: keeps a 16:9 shape at any card width */
-.thumb { aspect-ratio: 16 / 9; border-radius: 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #FFFFFF; text-align: center; margin-bottom: .6rem; }
-.thumb b { font-family: 'Newsreader', Georgia, serif; font-size: 1.5rem; }
+/* Badges, pills, thumbnails */
+.badge { display: inline-block; color: #FFFFFF; border-radius: 999px; padding: 3px 12px; font-size: .85rem; font-weight: 600; }
+.badge.success { background: var(--teal); color: var(--plum); }
+.pill { display: inline-block; background: #FFFFFF; border: 1px solid var(--line); color: var(--plum); border-radius: 999px; padding: 2px 12px; font-size: .85rem; margin: 0 var(--s2) var(--s2) 0; }
+.thumb { aspect-ratio: 16 / 9; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #FFFFFF; text-align: center; }
+.thumb b { font-family: 'Fraunces', Georgia, serif; font-size: 1.5rem; }
 .thumb span { font-size: .85rem; }
 
+/* Buttons: coral for primary actions, plum outline for secondary */
+[data-testid="stBaseButton-primary"] { background: var(--coral) !important; border: 2px solid var(--coral) !important; border-radius: 999px !important; font-weight: 700; }
+[data-testid="stBaseButton-primary"], [data-testid="stBaseButton-primary"] p { color: var(--plum) !important; }
+[data-testid="stBaseButton-primary"]:hover { background: var(--coral-hover) !important; border-color: var(--coral-hover) !important; }
+[data-testid="stBaseButton-secondary"], [data-testid^="stBaseLinkButton"] { background: #FFFFFF !important; border: 2px solid var(--plum) !important; border-radius: 999px !important; font-weight: 600; }
+[data-testid="stBaseButton-secondary"], [data-testid="stBaseButton-secondary"] p, [data-testid^="stBaseLinkButton"], [data-testid^="stBaseLinkButton"] p { color: var(--plum) !important; }
+[data-testid="stBaseButton-secondary"]:hover, [data-testid^="stBaseLinkButton"]:hover { background: var(--plum) !important; }
+[data-testid="stBaseButton-secondary"]:hover p, [data-testid^="stBaseLinkButton"]:hover p { color: #FFFFFF !important; }
+
+/* Inputs, labels, expanders */
+[data-testid="stWidgetLabel"] p { font-weight: 600; color: var(--plum); }
+[data-baseweb="input"], [data-baseweb="select"] > div { background: #FFFFFF; border-radius: 10px; border-color: #CFC5E8; }
+[data-testid="stExpander"] { background: #FFFFFF; border: 1px solid var(--line); border-radius: 10px; }
+[data-testid="stExpander"] summary { font-weight: 600; color: var(--plum); }
+
+/* Notices: coral for alerts and empty states, teal for success */
+.notice { border-radius: 12px; padding: var(--s4) var(--s5); margin: var(--s3) 0; background: #FFF1EF; border: 1px solid #FFC9C2; border-left: 6px solid var(--coral); color: var(--ink); line-height: 1.55; }
+.notice.success { background: #E8F7F5; border-color: #B5E4DF; border-left-color: var(--teal); }
+
+/* Visible keyboard focus */
+.stApp button:focus-visible, .stApp input:focus-visible, .stApp a:focus-visible, .stApp [role="combobox"]:focus-visible, .stApp summary:focus-visible, .stApp label:has(input:focus-visible) { outline: 3px solid var(--plum) !important; outline-offset: 3px; }
+
 /* Rubric table */
-.table-wrap { overflow-x: auto; }
-table.rubric { border-collapse: collapse; width: 100%; font-size: .9rem; }
-table.rubric th { background: #16213E; color: #FFFFFF; text-align: left; padding: .6rem .75rem; font-weight: 600; }
-table.rubric td { border: 1px solid #D9E0E7; padding: .6rem .75rem; vertical-align: top; color: #3A4756; background: #FFFFFF; }
-table.rubric td.crit { font-weight: 600; color: #16213E; background: #EEF2F6; }
-table.rubric th.crit { font-weight: 600; color: #16213E; background: #EEF2F6; }
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; }
+table.rubric { border-collapse: collapse; width: 100%; font-size: .92rem; min-width: 640px; }
+table.rubric th { background: var(--plum); color: #FFFFFF; text-align: left; padding: var(--s3) var(--s4); font-weight: 600; }
+table.rubric td { border-top: 1px solid var(--line); padding: var(--s3) var(--s4); vertical-align: top; color: var(--ink); background: #FFFFFF; }
+table.rubric th.crit { background: var(--lavender); color: var(--plum); border-top: 1px solid var(--line); }
+
+/* Small screens: tighter page padding and smaller hero details */
+@media (max-width: 640px) {
+  .block-container, [data-testid="stMainBlockContainer"] { padding: var(--s4) var(--s4) var(--s6); }
+  .hero { border-radius: 16px; }
+  .chip b { font-size: 1.25rem; }
+}
 </style>
 """
 
@@ -169,13 +212,13 @@ MAX_HISTORY = 5
 
 # Exemplar genres and their colors (white text on each color meets contrast guidelines)
 EXEMPLAR_GENRE_COLORS = {
-    "Comics": "#B23A48",
+    "Comics": "#B45309",
     "Digital Story": "#6B4E9B",
-    "Infographic": "#1F7A8C",
-    "Podcast": "#A8620F",
+    "Infographic": "#16807A",
+    "Podcast": "#B8453A",
     "Poster": "#3F7D4E",
     "Video Essay": "#8A3B5E",
-    "Website": "#324A5F",
+    "Website": "#4B3A7A",
 }
 EXEMPLAR_GENRES = list(EXEMPLAR_GENRE_COLORS)
 SORT_OPTIONS = ["Genre (A to Z)", "Genre (Z to A)", "Title (A to Z)"]
@@ -393,17 +436,24 @@ def esc(text):
     return html.escape(str(text))
 
 
-def render_card(title, body, modality=None, meta=None, tags=None):
-    """Draw one content card. The left border color encodes the modality."""
-    accent = MODALITY_COLORS.get(modality, "#1F7A8C")
-    parts = [f'<div class="card" style="--accent:{accent}">', f'<div class="card-title">{esc(title)}</div>']
-    if meta:
-        parts.append(f'<div class="meta">{esc(meta)}</div>')
-    parts.append(f"<p>{esc(body)}</p>")
-    if tags:
-        parts.append("".join(f'<span class="pill">{esc(t)}</span>' for t in tags))
-    parts.append("</div>")
-    st.markdown("".join(parts), unsafe_allow_html=True)
+def slug(text):
+    """Lowercase, hyphenated version of a title; used to build unique container keys."""
+    return re.sub(r"[^a-z0-9]+", "-", str(text).lower()).strip("-")
+
+
+def card(key):
+    """Bordered container styled as a card (the key becomes a CSS class: st-key-card_<key>)."""
+    return st.container(border=True, key=f"card_{key}")
+
+
+def panel(key):
+    """Bordered container styled as a filter panel (CSS class: st-key-panel_<key>)."""
+    return st.container(border=True, key=f"panel_{key}")
+
+
+def notice(text, kind="alert", role="status"):
+    """Friendly message box. kind="alert" is coral (empty states, warnings); kind="success" is teal."""
+    st.markdown(f'<div class="notice {kind}" role="{role}">{esc(text)}</div>', unsafe_allow_html=True)
 
 
 def card_grid(items, render_fn, columns=2):
@@ -414,14 +464,10 @@ def card_grid(items, render_fn, columns=2):
             render_fn(item)
 
 
-def render_resource(r):
-    render_card(r["title"], r["description"], r["modality"], f'{r["genre"]}: {r["format"]} for {r["course"]}', r["tags"])
-
-
 def render_exemplar(e):
     """Bordered card: thumbnail placeholder, genre badge, title, description, objectives, link button."""
     color = EXEMPLAR_GENRE_COLORS[e["genre"]]
-    with st.container(border=True):
+    with card(f'ex-{slug(e["title"])}'):
         # Thumbnail placeholder (swap for st.image(...) when real screenshots exist)
         st.markdown(
             f'<div class="thumb" role="img" aria-label="Placeholder thumbnail for {esc(e["title"])}" style="background:{color}">'
@@ -466,9 +512,10 @@ def search_resources(resources, query, genre):
 
 def render_resource_card(r):
     """Bordered card: genre badge, title, description, tags, and an expander for details."""
-    color = MODALITY_COLORS.get(r["modality"], "#1F7A8C")
-    with st.container(border=True):
-        st.markdown(f'<span class="badge" style="background:{color}">{esc(r["genre"])}</span>', unsafe_allow_html=True)
+    color = MODALITY_COLORS.get(r["modality"], "#16807A")
+    with card(f'res-{slug(r["title"])}'):
+        featured = ' <span class="badge success">Featured</span>' if r.get("featured") else ""
+        st.markdown(f'<span class="badge" style="background:{color}">{esc(r["genre"])}</span>{featured}', unsafe_allow_html=True)
         st.markdown(f'<h3 class="res-title">{esc(r["title"])}</h3>', unsafe_allow_html=True)
         st.write(r["description"])
         st.markdown("".join(f'<span class="pill">{esc(t)}</span>' for t in r["tags"]), unsafe_allow_html=True)
@@ -482,9 +529,9 @@ def render_resource_card(r):
 
 
 def page_header(title, blurb):
-    """Standard page title and one-line description."""
+    """Standard page title (h1) and a one-line lead paragraph."""
     st.title(title)
-    st.write(blurb)
+    st.markdown(f'<p class="lead">{esc(blurb)}</p>', unsafe_allow_html=True)
 
 
 def go_to(page):
@@ -496,36 +543,40 @@ def go_to(page):
 # 5. PAGE FUNCTIONS
 # ---------------------------------------------------------------------------
 def page_home():
-    # Hero banner with a strip counting items in each modality
-    counts = {m: sum(x["modality"] == m for x in RESOURCES + EXEMPLARS) for m in MODALITY_COLORS}
-    strip = "".join(f'<div style="background:{c}"><b>{counts[m]}</b>{m}</div>' for m, c in MODALITY_COLORS.items())
+    # Hero banner with count chips (counts come from the data, so they stay accurate)
+    counts = [(len(RESOURCES), "resources"), (len(EXEMPLARS), "exemplars"), (len(LESSON_PLANS), "lesson plans"), (len(RUBRICS), "rubrics")]
+    chips = "".join(f'<div class="chip"><b>{n}</b>{label}</div>' for n, label in counts)
     st.markdown(
-        '<div class="hero"><div class="hero-title">Teach and learn through writing, image, sound, and video.</div>'
-        "<p>Find resources, study student work, plan class sessions, and grade with shared rubrics. "
-        "The strip below shows how many resources and exemplars the hub holds in each modality.</p>"
-        f'<div class="strip">{strip}</div></div>',
+        '<div class="hero"><h1 class="hero-title">Teach and learn through writing, image, sound, and video.</h1>'
+        "<p>A library of resources, student exemplars, lesson plans, and rubrics for multimodal projects in college courses.</p>"
+        f'<div class="chips">{chips}</div></div>',
         unsafe_allow_html=True,
     )
 
-    # Quick-start cards: each button jumps to a section
-    st.subheader("Start here")
+    # Calls to action under the hero (one primary, one secondary)
+    c1, c2, _ = st.columns([1, 1, 2])
+    c1.button("Search resources", key="hero_search", type="primary", on_click=go_to, args=("Search Resources",))
+    c2.button("Browse exemplars", key="hero_browse", on_click=go_to, args=("Browse Exemplars",))
+
+    # Start-here cards: each button jumps to a section
+    st.header("Start here")
     links = [
-        ("Search Resources", "Find a resource", "Search guides, templates, and tools by keyword, modality, or course."),
+        ("Search Resources", "Find a resource", "Search guides, templates, and tools by keyword and genre."),
         ("Browse Exemplars", "See student work", "Study sample projects with instructor commentary."),
         ("Lesson Plans", "Plan a session", "Open ready-to-adapt plans with timelines and materials."),
-        ("Rubrics", "Choose a rubric", "Compare criteria and performance levels for common projects."),
+        ("Rubrics", "Choose a rubric", "Compare criteria and performance levels, then download as PDF or Word."),
     ]
     cols = st.columns(2)
     for i, (page, heading, text) in enumerate(links):
         with cols[i % 2]:
-            with st.container(border=True):
-                st.markdown(f"##### {heading}")
+            with card(f"go-{slug(page)}"):
+                st.markdown(f'<h3 class="res-title">{esc(heading)}</h3>', unsafe_allow_html=True)
                 st.write(text)
                 st.button(f"Open {page}", key=f"go_{page}", on_click=go_to, args=(page,))
 
     # Recently added resources
-    st.subheader("Recently added")
-    card_grid(RESOURCES[:3], render_resource, columns=3)
+    st.header("Recently added")
+    card_grid(RESOURCES[:3], render_resource_card, columns=3)
 
 
 # --- Search page helpers: callbacks run before the page reruns, so they can set widget values ---
@@ -569,12 +620,12 @@ def render_empty_state(query, genre):
     if elsewhere:
         n = len(elsewhere)
         verb = "matches" if n == 1 else "match"
-        st.info(f'No {genre} resources match "{q}", but {n} in other genres {verb}.')
+        notice(f'No {genre} resources match "{q}", but {n} in other genres {verb}.')
         st.button("Search all genres", key="all_genres", on_click=set_genre, args=("All genres",))
     elif q:
-        st.info(f'We could not find anything for "{q}". Try a shorter or more general word, check the spelling, or pick a suggested keyword above.')
+        notice(f'We could not find anything for "{q}". Try a shorter or more general word, check the spelling, or pick a suggested keyword above.')
     else:
-        st.info(f"There are no {genre} resources yet. Choose another genre or clear the search.")
+        notice(f"There are no {genre} resources yet. Choose another genre or clear the search.")
 
 
 def page_search():
@@ -586,7 +637,7 @@ def page_search():
     st.session_state.setdefault("search_history", [])
 
     # Search box, genre filter, and Clear button (all with visible labels and help text)
-    with st.container(border=True):
+    with panel("search"):
         c1, c2 = st.columns([3, 1])
         query = c1.text_input("Search resources", placeholder="Try: podcast, alt text, storyboard",
                               help="Type one or more words. A resource must match every word.", key="search_query")
@@ -643,7 +694,7 @@ def page_exemplars():
     st.session_state.setdefault("ex_sort", SORT_OPTIONS[0])
 
     # Filter and sort controls (leaving Genres empty means all genres)
-    with st.container(border=True):
+    with panel("exemplars"):
         c1, c2 = st.columns([3, 2])
         genres = c1.multiselect("Genres", EXEMPLAR_GENRES, placeholder="All genres",
                                 help="Pick one or more genres. Leave empty to see all.", key="ex_genres")
@@ -662,7 +713,7 @@ def page_exemplars():
     st.markdown(f'<div role="status" aria-live="polite"><strong>{len(shown)} {noun} found</strong>{detail}</div>', unsafe_allow_html=True)
 
     if not shown:
-        st.info("No exemplars match these filters. Choose different genres or reset the filters.")
+        notice("No exemplars match these filters. Choose different genres or reset the filters.")
     elif sort_by == "Title (A to Z)":
         card_grid(shown, render_exemplar)  # one flat grid
     else:
@@ -710,8 +761,8 @@ def filter_plans(plans, genre, level, time_range):
 
 def render_plan_card(plan):
     """Preview card: badge, title, level and time, description, expandable plan preview, download button."""
-    color = EXEMPLAR_GENRE_COLORS.get(plan["genre"], "#324A5F")
-    with st.container(border=True):
+    color = EXEMPLAR_GENRE_COLORS.get(plan["genre"], "#4B3A7A")
+    with card(f'plan-{plan["id"]}'):
         st.markdown(f'<span class="badge" style="background:{color}">{esc(plan["genre"])}</span>', unsafe_allow_html=True)
         st.markdown(f'<h3 class="res-title">{esc(plan["title"])}</h3>', unsafe_allow_html=True)
         st.markdown(f'<span class="pill">Level: {esc(plan["level"])}</span><span class="pill">Time: {plan["duration_min"]} minutes</span>',
@@ -732,7 +783,7 @@ def render_plan_card(plan):
             st.markdown("**Assessment**")
             st.write(plan["assessment"])
         st.download_button(f'Download {plan["title"]} (.txt)', data=plan_to_text(plan), file_name=f'{plan["id"]}.txt',
-                           mime="text/plain", key=f'dl_{plan["id"]}', help="Saves a plain-text copy you can edit")
+                           mime="text/plain", key=f'dl_{plan["id"]}', help="Saves a plain-text copy you can edit", type="primary")
 
 
 def reset_plan_filters():
@@ -749,7 +800,7 @@ def page_lessons():
     st.session_state.setdefault("lp_time", "Any length")
 
     # Three filters in one bordered container
-    with st.container(border=True):
+    with panel("lessons"):
         c1, c2, c3 = st.columns(3)
         genre = c1.selectbox("Genre", ["All genres"] + LESSON_GENRES, key="lp_genre", help="The kind of project the lesson supports.")
         level = c2.selectbox("Course level", ["All levels"] + COURSE_LEVELS, key="lp_level", help="Instructional level of the course.")
@@ -765,10 +816,10 @@ def page_lessons():
     if plans:
         # One download for everything currently shown, then the preview cards
         st.download_button(f"Download all {len(plans)} shown (.zip)", data=plans_to_zip(plans), file_name="lesson-plans.zip",
-                           mime="application/zip", key="lp_zip", help="One text file per plan, bundled in a zip")
+                           mime="application/zip", key="lp_zip", help="One text file per plan, bundled in a zip", type="primary")
         card_grid(plans, render_plan_card)
     else:
-        st.info("No lesson plans match these filters. Try a different course level or time range, or reset the filters.")
+        notice("No lesson plans match these filters. Try a different course level or time range, or reset the filters.")
 
 
 def rubric_total(rubric):
@@ -894,9 +945,9 @@ def rubric_to_docx(rubric):
 
 def render_rubric_card(rubric):
     """Card: badge, title, point total, preview expander, and PDF / Word download buttons."""
-    color = EXEMPLAR_GENRE_COLORS.get(rubric["genre"], "#324A5F")
+    color = EXEMPLAR_GENRE_COLORS.get(rubric["genre"], "#4B3A7A")
     total = rubric_total(rubric)
-    with st.container(border=True):
+    with card(f'rubric-{rubric["id"]}'):
         st.markdown(f'<span class="badge" style="background:{color}">{esc(rubric["genre"])}</span>', unsafe_allow_html=True)
         st.markdown(f'<h3 class="res-title">{esc(rubric["title"])}</h3>', unsafe_allow_html=True)
         st.markdown(f'<span class="pill">Total: {total} points</span><span class="pill">{len(rubric["criteria"])} criteria</span>'
@@ -909,14 +960,14 @@ def render_rubric_card(rubric):
         try:
             pdf_bytes, docx_bytes = rubric_to_pdf(rubric), rubric_to_docx(rubric)
         except ImportError:
-            st.warning("PDF and Word downloads need the fpdf2 and python-docx packages. Add both to requirements.txt.")
+            notice("PDF and Word downloads need the fpdf2 and python-docx packages. Add both to requirements.txt.", "alert", "alert")
             return
         c1, c2 = st.columns(2)
         c1.download_button(f'Download {rubric["title"]} (PDF)', data=pdf_bytes, file_name=f'{rubric["id"]}.pdf',
-                           mime="application/pdf", key=f'pdf_{rubric["id"]}', help="Print-ready, landscape")
+                           mime="application/pdf", key=f'pdf_{rubric["id"]}', help="Print-ready, landscape", type="primary")
         c2.download_button(f'Download {rubric["title"]} (Word)', data=docx_bytes, file_name=f'{rubric["id"]}.docx',
                            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                           key=f'docx_{rubric["id"]}', help="Editable in Word or Google Docs")
+                           key=f'docx_{rubric["id"]}', help="Editable in Word or Google Docs", type="primary")
 
 
 def page_rubrics():
@@ -924,7 +975,7 @@ def page_rubrics():
     st.session_state.setdefault("rb_genre", "All genres")
 
     # Genre filter
-    with st.container(border=True):
+    with panel("rubrics"):
         genre = st.selectbox("Genre", ["All genres"] + RUBRIC_GENRES, key="rb_genre", help="Show the rubric for one type of project.")
 
     shown = [r for r in RUBRICS if genre == "All genres" or r["genre"] == genre]
@@ -955,13 +1006,14 @@ def main():
     st.session_state.setdefault("nav", "Home")
 
     with st.sidebar:
+        # Logo placeholder: swap the "MS" block for your real logo (for example st.image) when you have one
         st.markdown(
-            '<div class="brand">Multimodal Studio Hub</div>'
-            '<div class="tagline">Resources for teaching and learning beyond the written word</div>',
+            '<div class="logo-row"><div class="logo" role="img" aria-label="Logo placeholder">MS</div>'
+            '<div><div class="brand">Multimodal Studio Hub</div><div class="tagline">Teaching resources for multimodal projects</div></div></div>',
             unsafe_allow_html=True,
         )
         st.radio("Navigate", list(PAGES), key="nav", label_visibility="collapsed")
-        st.caption("All content is placeholder data. Replace it in Section 3 of app.py.")
+        st.caption("All content is placeholder data. Replace it in Section 3 of this file.")
 
     PAGES[st.session_state["nav"]]()
 
