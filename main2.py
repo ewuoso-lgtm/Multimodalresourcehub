@@ -1247,11 +1247,7 @@ def show_welcome_splash():
     if intro_video.is_file():
         st.video(str(intro_video))
     else:
-        st.markdown(
-            '<div class="notice" role="note"><strong>Video introduction placeholder</strong><br>'
-            'Add a short video at <code>assets/welcome-intro.mp4</code> to display it here.</div>',
-            unsafe_allow_html=True,
-        )
+        st.video("https://www.youtube.com/watch?v=j28H9btX5vs")
 
     countdown = st.empty()
     for seconds_left in range(8, 0, -1):
