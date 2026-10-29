@@ -11,13 +11,12 @@ Use from the main Streamlit app:
     auth.render_account_sidebar(user)
     # Render the rest of the app here.
 
-Set AUTH_DB_PATH to choose another database location. The default is
-data/users.db, relative to the directory where Streamlit is started.
+Set DATABASE_URL to use a persistent PostgreSQL database. Without it, the app
+uses data/users.db as a local SQLite fallback.
 
-IMPORTANT: Keep data/users.db and the data/ directory out of Git. It contains
-account identifiers and password hashes. Local files on Streamlit Community
-Cloud are not durable across restarts; use persistent storage before hosting
-real user accounts there.
+IMPORTANT: Never commit database files or DATABASE_URL to Git. Passwords are
+stored as salted scrypt hashes, never as plain text. Streamlit Community Cloud
+does not guarantee persistence for its local SQLite files.
 """
 
 import base64
@@ -38,7 +37,26 @@ import streamlit.components.v1 as components
 # ---------------------------------------------------------------------------
 # Settings
 # ---------------------------------------------------------------------------
-DB_PATH = Path(os.environ.get("AUTH_DB_PATH", "data/users.db"))
+DB_PATH = Path(os.environ.get("AUTH_DB_PATH", str(Path(__file__).resolve().parent / "data" / "users.db")))
+
+def database_url():
+    """Read the optional PostgreSQL URL from the environment or Streamlit secrets."""
+    url = os.environ.get("DATABASE_URL", "").strip()
+    if url:
+        return url
+    try:
+        return str(st.secrets.get("DATABASE_URL", "")).strip() or None
+    except Exception:
+        return None
+
+
+def using_postgres():
+    return bool(database_url())
+
+
+def sql(statement):
+    """Translate this module's SQLite-style placeholders for psycopg."""
+    return statement.replace("?", "%s") if using_postgres() else statement
 ROLES = {"student": "Student", "instructor": "Instructor"}
 
 MIN_USER_ID_LENGTH = 3
@@ -118,13 +136,33 @@ CREATE TABLE IF NOT EXISTS users (
 );
 """
 
+POSTGRES_SCHEMA = """
+CREATE TABLE IF NOT EXISTS users (
+    id BIGSERIAL PRIMARY KEY,
+    user_id TEXT NOT NULL UNIQUE,
+    password_hash TEXT NOT NULL,
+    role TEXT NOT NULL CHECK (role IN ('student', 'instructor')),
+    onboarding_done INTEGER NOT NULL DEFAULT 0,
+    failed_attempts INTEGER NOT NULL DEFAULT 0,
+    locked_until DOUBLE PRECISION NOT NULL DEFAULT 0,
+    created_at DOUBLE PRECISION NOT NULL,
+    last_login DOUBLE PRECISION
+)
+"""
+
 
 @contextmanager
 def db():
-    """Open a database connection and commit or roll back its transaction."""
-    DB_PATH.parent.mkdir(parents=True, exist_ok=True)
-    conn = sqlite3.connect(DB_PATH, timeout=10)
-    conn.row_factory = sqlite3.Row
+    """Open a PostgreSQL connection when configured, otherwise local SQLite."""
+    url = database_url()
+    if url:
+        import psycopg
+        from psycopg.rows import dict_row
+        conn = psycopg.connect(url, row_factory=dict_row, connect_timeout=10)
+    else:
+        DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+        conn = sqlite3.connect(DB_PATH, timeout=10)
+        conn.row_factory = sqlite3.Row
     try:
         yield conn
         conn.commit()
@@ -136,38 +174,59 @@ def db():
 
 
 def init_db():
-    """Create the account table if needed and restrict database file permissions."""
+    """Create the account table in the selected database."""
     with db() as conn:
-        conn.executescript(SCHEMA)
-    try:
-        os.chmod(DB_PATH, 0o600)
-    except OSError:
-        pass
+        if database_url():
+            conn.execute(POSTGRES_SCHEMA)
+        else:
+            conn.executescript(SCHEMA)
+    if not database_url():
+        try:
+            os.chmod(DB_PATH, 0o600)
+        except OSError:
+            pass
 
 
 def get_user_by_user_id(user_id):
     with db() as conn:
         return conn.execute(
-            "SELECT * FROM users WHERE user_id = ?", (normalize_user_id(user_id),)
+            sql("SELECT * FROM users WHERE user_id = ?"), (normalize_user_id(user_id),)
         ).fetchone()
 
 
 def get_user(user_pk):
     with db() as conn:
-        return conn.execute("SELECT * FROM users WHERE id = ?", (user_pk,)).fetchone()
+        return conn.execute(sql("SELECT * FROM users WHERE id = ?"), (user_pk,)).fetchone()
 
 
 def create_user(user_id, password_hash, role):
-    """Create an account. Returns (new database ID, None) or (None, error)."""
+    """Create an account; only a salted password hash is stored."""
     try:
         with db() as conn:
+            params = (normalize_user_id(user_id), password_hash, role, time.time())
+            if database_url():
+                row = conn.execute(
+                    "INSERT INTO users (user_id, password_hash, role, created_at) "
+                    "VALUES (%s, %s, %s, %s) RETURNING id",
+                    params,
+                ).fetchone()
+                return row["id"], None
             cur = conn.execute(
                 "INSERT INTO users (user_id, password_hash, role, created_at) VALUES (?, ?, ?, ?)",
-                (normalize_user_id(user_id), password_hash, role, time.time()),
+                params,
             )
             return cur.lastrowid, None
-    except sqlite3.IntegrityError:
-        return None, "That user ID is already in use. Please choose another."
+    except Exception as exc:
+        integrity_errors = [sqlite3.IntegrityError]
+        if database_url():
+            try:
+                import psycopg
+                integrity_errors.append(psycopg.IntegrityError)
+            except ImportError:
+                pass
+        if isinstance(exc, tuple(integrity_errors)):
+            return None, "That user ID is already in use. Please choose another."
+        raise
 
 
 def update_user(user_pk, **fields):
@@ -178,25 +237,25 @@ def update_user(user_pk, **fields):
     assignments = ", ".join(f"{column} = ?" for column in fields)
     with db() as conn:
         conn.execute(
-            f"UPDATE users SET {assignments} WHERE id = ?", (*fields.values(), user_pk)
+            sql(f"UPDATE users SET {assignments} WHERE id = ?"), (*fields.values(), user_pk)
         )
 
 
 def record_failed_login(user_pk):
     with db() as conn:
         row = conn.execute(
-            "SELECT failed_attempts FROM users WHERE id = ?", (user_pk,)
+            sql("SELECT failed_attempts FROM users WHERE id = ?"), (user_pk,)
         ).fetchone()
         if not row:
             return
         failures = row["failed_attempts"] + 1
         if failures >= MAX_LOGIN_FAILURES:
             conn.execute(
-                "UPDATE users SET failed_attempts = 0, locked_until = ? WHERE id = ?",
+                sql("UPDATE users SET failed_attempts = 0, locked_until = ? WHERE id = ?"),
                 (time.time() + LOCKOUT_SECONDS, user_pk),
             )
         else:
-            conn.execute("UPDATE users SET failed_attempts = ? WHERE id = ?", (failures, user_pk))
+            conn.execute(sql("UPDATE users SET failed_attempts = ? WHERE id = ?"), (failures, user_pk))
 
 
 # ---------------------------------------------------------------------------
@@ -385,7 +444,12 @@ def render_signup_form():
         return
 
     role = "instructor" if role_label == "Instructor" else "student"
-    user_pk, error = create_user(user_id, hash_password(password), role)
+    try:
+        user_pk, error = create_user(user_id, hash_password(password), role)
+    except Exception:
+        log.exception("Could not save a new account")
+        st.error("We couldn't save your account right now. Please try again later or contact the site administrator.")
+        return
     if error:
         st.error(error)
         return
@@ -422,6 +486,12 @@ def render_auth_page():
         '</section>',
         unsafe_allow_html=True,
     )
+
+    if not database_url():
+        st.warning(
+            "Account storage is currently local and may reset when the hosted app restarts. "
+            "The site administrator must configure DATABASE_URL in Streamlit Secrets for persistent accounts."
+        )
 
     music_path = Path(__file__).resolve().parent / "assets" / "login-signup-music.mp3"
     if music_path.is_file():
@@ -500,7 +570,12 @@ def role_label(user):
 
 def require_login():
     """Require an account and finish the first-login tutorial before returning the user."""
-    init_db()
+    try:
+        init_db()
+    except Exception:
+        log.exception("Could not initialize the account database")
+        st.error("Account storage is unavailable. Please try again later or contact the site administrator.")
+        st.stop()
     user = current_user()
     if not user:
         render_auth_page()
