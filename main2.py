@@ -503,12 +503,16 @@ def render_exemplar(e):
     """Bordered card: thumbnail placeholder, genre badge, title, description, objectives, link button."""
     color = EXEMPLAR_GENRE_COLORS[e["genre"]]
     with card(f'ex-{slug(e["title"])}'):
-        # Thumbnail placeholder (swap for st.image(...) when real screenshots exist)
-        st.markdown(
-            f'<div class="thumb" role="img" aria-label="Placeholder thumbnail for {esc(e["title"])}" style="background:{color}">'
-            f'<b>{esc(e["genre"])}</b><span>Thumbnail placeholder</span></div>',
-            unsafe_allow_html=True,
-        )
+        comics_thumbnail = Path("assets/comics-thumbnail.jpg")
+        if e["genre"] == "Comics" and comics_thumbnail.is_file():
+            st.image(str(comics_thumbnail), caption=e["title"], use_container_width=True)
+        else:
+            # Keep the styled placeholder for genres without a supplied thumbnail.
+            st.markdown(
+                f'<div class="thumb" role="img" aria-label="Placeholder thumbnail for {esc(e["title"])}" style="background:{color}">'
+                f'<b>{esc(e["genre"])}</b><span>Thumbnail placeholder</span></div>',
+                unsafe_allow_html=True,
+            )
         st.markdown(f'<span class="badge" style="background:{color}">{esc(e["genre"])}</span>', unsafe_allow_html=True)
         st.markdown(f'<h3 class="res-title">{esc(e["title"])}</h3>', unsafe_allow_html=True)
         st.caption(e["course"])
