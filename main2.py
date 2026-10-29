@@ -107,6 +107,10 @@ h1, h2, h3, h4, h5 { font-family: 'Fraunces', Georgia, serif !important; color: 
 @media (max-width: 640px) {
   .hero.lesson-plans-hero { background-image: linear-gradient(rgba(22,33,62,.82), rgba(22,33,62,.74)), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/lesson-plans-hero.jpg"); background-position: center; min-height: 0; }
 }
+.hero.rubrics-hero { background: linear-gradient(90deg, rgba(22,33,62,.94) 0%, rgba(22,33,62,.82) 44%, rgba(22,33,62,.16) 100%), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/rubrics-hero.jpg") center / cover no-repeat; min-height: 300px; border: 1px solid rgba(255,255,255,.24); }
+@media (max-width: 640px) {
+  .hero.rubrics-hero { background-image: linear-gradient(rgba(22,33,62,.82), rgba(22,33,62,.74)), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/rubrics-hero.jpg"); background-position: center; min-height: 0; }
+}
 .stApp h1.hero-title { font-size: clamp(1.8rem, 1.2rem + 2.6vw, 3rem) !important; line-height: 1.12; color: #FFFFFF !important; max-width: 20ch; margin: 0 0 var(--s3); padding: 0; }
 .hero p { color: #E6DFF5 !important; font-size: 1.05rem; max-width: 56ch; margin: 0; }
 .chips { display: flex; flex-wrap: wrap; gap: var(--s3); margin-top: var(--s5); }
@@ -1251,7 +1255,11 @@ def render_rubric_card(rubric):
 
 
 def page_rubrics():
-    page_header("Rubrics", "Preview a rubric, then download it as a PDF or Word document to adapt for your assignment.")
+    page_header(
+        "Rubrics",
+        "Preview a rubric, then download it as a PDF or Word document to adapt for your assignment.",
+        hero_class="rubrics-hero",
+    )
     st.session_state.setdefault("rb_genre", "All genres")
 
     # Genre filter
