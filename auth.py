@@ -20,6 +20,7 @@ Cloud are not durable across restarts; use persistent storage before hosting
 real user accounts there.
 """
 
+import base64
 import hashlib
 import hmac
 import logging
@@ -31,6 +32,7 @@ from contextlib import contextmanager
 from pathlib import Path
 
 import streamlit as st
+import streamlit.components.v1 as components
 
 
 # ---------------------------------------------------------------------------
@@ -418,12 +420,49 @@ def render_auth_page():
 
     music_path = Path(__file__).resolve().parent / "assets" / "login-signup-music.mp3"
     if music_path.is_file():
-        st.audio(
-            str(music_path),
-            format="audio/mpeg",
-            loop=True,
-            autoplay=True,
-        )
+        audio_data = base64.b64encode(music_path.read_bytes()).decode("ascii")
+        music_html = """
+        <div style="display:flex;align-items:center;gap:14px;padding:10px 14px;
+                    border:1px solid #ded8eb;border-radius:14px;background:#f8f6fc;
+                    font-family:system-ui,sans-serif;color:#24183d;">
+          <button id="musicButton" type="button" aria-label="Play welcome music"
+                  style="width:48px;height:48px;flex:none;border:0;border-radius:50%;
+                         background:#2D1E4F;color:white;font-size:21px;cursor:pointer;
+                         box-shadow:0 2px 8px #2d1e4f44;">▶</button>
+          <div>
+            <div id="musicLabel" style="font-weight:700;">Welcome music</div>
+            <div style="font-size:13px;color:#5A5170;">Press play to start · loops while you sign in</div>
+          </div>
+          <audio id="welcomeAudio" preload="metadata" loop
+                 src="data:audio/mpeg;base64,__AUDIO_DATA__"></audio>
+        </div>
+        <script>
+          const audio = document.getElementById("welcomeAudio");
+          const button = document.getElementById("musicButton");
+          const label = document.getElementById("musicLabel");
+          audio.volume = 0.45;
+          button.addEventListener("click", async () => {
+            if (audio.paused) {
+              try {
+                await audio.play();
+                button.textContent = "Ⅱ";
+                button.setAttribute("aria-label", "Pause welcome music");
+                label.textContent = "Welcome music is playing";
+              } catch (error) {
+                label.textContent = "Could not play audio — try again";
+              }
+            } else {
+              audio.pause();
+              button.textContent = "▶";
+              button.setAttribute("aria-label", "Play welcome music");
+              label.textContent = "Welcome music";
+            }
+          });
+        </script>
+        """.replace("__AUDIO_DATA__", audio_data)
+        components.html(music_html, height=78, scrolling=False)
+    else:
+        st.warning("Welcome music is unavailable right now.")
 
     tab_login, tab_signup = st.tabs(["Log in", "Sign up"])
     with tab_login:
