@@ -95,6 +95,10 @@ h1, h2, h3, h4, h5 { font-family: 'Fraunces', Georgia, serif !important; color: 
 @media (max-width: 640px) {
   .hero.hero-home { background-image: linear-gradient(rgba(22,33,62,.82), rgba(22,33,62,.74)), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/home-hero.jpg"); background-position: center; min-height: 0; }
 }
+.hero.search-resources-hero { background: linear-gradient(90deg, rgba(22,33,62,.94) 0%, rgba(22,33,62,.82) 44%, rgba(22,33,62,.16) 100%), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/search-resources-hero.jpg") center / cover no-repeat; min-height: 300px; border: 1px solid rgba(255,255,255,.24); }
+@media (max-width: 640px) {
+  .hero.search-resources-hero { background-image: linear-gradient(rgba(22,33,62,.82), rgba(22,33,62,.74)), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/search-resources-hero.jpg"); background-position: center; min-height: 0; }
+}
 .stApp h1.hero-title { font-size: clamp(1.8rem, 1.2rem + 2.6vw, 3rem) !important; line-height: 1.12; color: #FFFFFF !important; max-width: 20ch; margin: 0 0 var(--s3); padding: 0; }
 .hero p { color: #E6DFF5 !important; font-size: 1.05rem; max-width: 56ch; margin: 0; }
 .chips { display: flex; flex-wrap: wrap; gap: var(--s3); margin-top: var(--s5); }
@@ -582,10 +586,16 @@ def render_resource_card(r):
         render_related_resources("resource", r["genre"], r["title"])
 
 
-def page_header(title, blurb):
-    """Standard page title (h1) and a one-line lead paragraph."""
-    st.title(title)
-    st.markdown(f'<p class="lead">{esc(blurb)}</p>', unsafe_allow_html=True)
+def page_header(title, blurb, hero_class=None):
+    """Render a standard page heading, or a photo hero when a class is supplied."""
+    if hero_class:
+        st.markdown(
+            f'<div class="hero {hero_class}"><h1 class="hero-title">{esc(title)}</h1><p>{esc(blurb)}</p></div>',
+            unsafe_allow_html=True,
+        )
+    else:
+        st.title(title)
+        st.markdown(f'<p class="lead">{esc(blurb)}</p>', unsafe_allow_html=True)
 
 
 def go_to(page):
@@ -858,7 +868,11 @@ def render_empty_state(query, genre):
 
 
 def page_search():
-    page_header("Search resources", "Search by keyword, then narrow the results by genre.")
+    page_header(
+        "Search resources",
+        "Search by keyword, then narrow the results by genre.",
+        hero_class="search-resources-hero",
+    )
 
     # Make sure the session values exist before any widget reads them
     st.session_state.setdefault("search_query", "")
