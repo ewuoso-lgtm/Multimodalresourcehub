@@ -503,9 +503,13 @@ def render_exemplar(e):
     """Bordered card: thumbnail placeholder, genre badge, title, description, objectives, link button."""
     color = EXEMPLAR_GENRE_COLORS[e["genre"]]
     with card(f'ex-{slug(e["title"])}'):
-        comics_thumbnail = Path("assets/comics-thumbnail.jpg")
-        if e["genre"] == "Comics" and comics_thumbnail.is_file():
-            st.image(str(comics_thumbnail), caption=e["title"], use_container_width=True)
+        thumbnails = {
+            "Comics": Path("assets/comics-thumbnail.jpg"),
+            "Digital Story": Path("assets/digital-story-thumbnail.jpg"),
+        }
+        thumbnail = thumbnails.get(e["genre"])
+        if thumbnail and thumbnail.is_file():
+            st.image(str(thumbnail), caption=e["title"], use_container_width=True)
         else:
             # Keep the styled placeholder for genres without a supplied thumbnail.
             st.markdown(
