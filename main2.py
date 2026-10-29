@@ -508,6 +508,7 @@ def render_exemplar(e):
             "Digital Story": Path("assets/digital-story-thumbnail.jpg"),
             "Infographic": Path("assets/infographic-thumbnail.jpg"),
             "Website": Path("assets/website-thumbnail.jpg"),
+            "Podcast": Path("assets/podcast-thumbnail.jpg"),
         }
         thumbnail = thumbnails.get(e["genre"])
         if thumbnail and thumbnail.is_file():
