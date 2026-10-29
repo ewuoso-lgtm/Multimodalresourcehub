@@ -103,6 +103,10 @@ h1, h2, h3, h4, h5 { font-family: 'Fraunces', Georgia, serif !important; color: 
 @media (max-width: 640px) {
   .hero.browse-exemplars-hero { background-image: linear-gradient(rgba(22,33,62,.82), rgba(22,33,62,.74)), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/browse-exemplars-hero.jpg"); background-position: center; min-height: 0; }
 }
+.hero.lesson-plans-hero { background: linear-gradient(90deg, rgba(22,33,62,.94) 0%, rgba(22,33,62,.82) 44%, rgba(22,33,62,.16) 100%), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/lesson-plans-hero.jpg") center / cover no-repeat; min-height: 300px; border: 1px solid rgba(255,255,255,.24); }
+@media (max-width: 640px) {
+  .hero.lesson-plans-hero { background-image: linear-gradient(rgba(22,33,62,.82), rgba(22,33,62,.74)), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/lesson-plans-hero.jpg"); background-position: center; min-height: 0; }
+}
 .stApp h1.hero-title { font-size: clamp(1.8rem, 1.2rem + 2.6vw, 3rem) !important; line-height: 1.12; color: #FFFFFF !important; max-width: 20ch; margin: 0 0 var(--s3); padding: 0; }
 .hero p { color: #E6DFF5 !important; font-size: 1.05rem; max-width: 56ch; margin: 0; }
 .chips { display: flex; flex-wrap: wrap; gap: var(--s3); margin-top: var(--s5); }
@@ -1056,9 +1060,17 @@ def reset_plan_filters():
 
 def page_lessons():
     if auth.has_instructor_access(auth.current_user()):
-        page_header("Lesson plans", "Preview sample plans for multimodal projects, then download them to adapt for your own course.")
+        page_header(
+            "Lesson plans",
+            "Preview sample plans for multimodal projects, then download them to adapt for your own course.",
+            hero_class="lesson-plans-hero",
+        )
     else:
-        page_header("Lesson plans", "Preview sample plans for multimodal projects. Downloads are available to verified instructors.")
+        page_header(
+            "Lesson plans",
+            "Preview sample plans for multimodal projects. Downloads are available to verified instructors.",
+            hero_class="lesson-plans-hero",
+        )
     st.session_state.setdefault("lp_genre", "All genres")
     st.session_state.setdefault("lp_level", "All levels")
     st.session_state.setdefault("lp_time", "Any length")
