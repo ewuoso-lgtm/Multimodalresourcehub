@@ -414,9 +414,14 @@ def render_login_form():
 
 def render_auth_page():
     """Show signup and login tabs with music for signed-out visitors."""
-    st.title("Welcome to Multimodal Studio Hub")
-    st.write("Create an account or log in to reach the resource library, lesson plans, exemplars, and project spaces.")
-    st.caption("Accounts use a user ID and password. If you forget your password, contact the site administrator.")
+    st.markdown(
+        '<section class="auth-hero">'
+        '<h1 class="hero-title">Welcome to Multimodal Studio Hub</h1>'
+        '<p>Create an account or log in to reach the resource library, lesson plans, exemplars, and project spaces.</p>'
+        '<p class="auth-caption">Accounts use a user ID and password. If you forget your password, contact the site administrator.</p>'
+        '</section>',
+        unsafe_allow_html=True,
+    )
 
     music_path = Path(__file__).resolve().parent / "assets" / "login-signup-music.mp3"
     if music_path.is_file():
