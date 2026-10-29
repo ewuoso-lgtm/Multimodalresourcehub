@@ -97,6 +97,7 @@ h1, h2, h3, h4, h5 { font-family: 'Fraunces', Georgia, serif !important; color: 
   display: flex; flex-direction: column; justify-content: center;
 }
 .auth-hero .auth-caption { color: #F0ECF8 !important; font-size: .92rem; margin-top: var(--s3); }
+.auth-hero p { color: #FFFFFF !important; text-shadow: 0 1px 2px rgba(0,0,0,.28); }
 @media (max-width: 640px) {
   .auth-hero {
     background-image: linear-gradient(rgba(22,33,62,.86), rgba(22,33,62,.80)), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/welcome-msh-hero.jpg");
