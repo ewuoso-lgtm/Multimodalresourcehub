@@ -1365,12 +1365,15 @@ def show_welcome_splash():
         unsafe_allow_html=True,
     )
 
+    # Stage the welcome content: reveal the video after five seconds, then the button two seconds later.
+    time.sleep(5)
     intro_video = Path("assets/welcome-intro.mp4")
     if intro_video.is_file():
         st.video(str(intro_video))
     else:
         st.video("https://www.youtube.com/watch?v=j28H9btX5vs")
 
+    time.sleep(2)
     left, center, right = st.columns([1, 1.4, 1])
     if center.button(
         "▶ Begin Here",
