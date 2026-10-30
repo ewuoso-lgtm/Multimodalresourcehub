@@ -1307,13 +1307,12 @@ PAGES = {
 
 
 def show_welcome_splash():
-    """Show a welcome splash and let visitors continue to login when ready."""
+    """Show only the welcome intro until the visitor chooses to continue."""
     if st.session_state.get("welcome_splash_shown"):
         return
-    st.session_state["welcome_splash_shown"] = True
 
     st.markdown(
-        '<div class="hero"><h1 class="hero-title">Welcome to Multimodal Studio Hub</h1>'
+        '<div class="hero"><h1 class="hero-title">Introducing Multimodal Studio Hub</h1>'
         '<p>Explore resources for creating, teaching, and learning through text, audio, video, and interactive media.</p></div>',
         unsafe_allow_html=True,
     )
@@ -1325,20 +1324,23 @@ def show_welcome_splash():
         st.video("https://www.youtube.com/watch?v=j28H9btX5vs")
 
     left, center, right = st.columns([1, 1.4, 1])
-    center.button(
+    if center.button(
         "▶ Begin Here",
         key="welcome_begin",
         type="primary",
         use_container_width=True,
-    )
+    ):
+        st.session_state["welcome_splash_shown"] = True
+        st.rerun()
 
 
 def main():
     st.markdown(CSS, unsafe_allow_html=True)
     st.session_state.setdefault("nav", "Home")
 
-    if not auth.current_user():
+    if not auth.current_user() and not st.session_state.get("welcome_splash_shown"):
         show_welcome_splash()
+        st.stop()
 
     # Logo block: shown on every screen, including sign in and the tutorial
     with st.sidebar:
