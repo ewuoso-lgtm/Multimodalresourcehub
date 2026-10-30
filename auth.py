@@ -480,7 +480,7 @@ def render_auth_page():
     """Show signup and login tabs with music for signed-out visitors."""
     st.markdown(
         '<section class="auth-hero">'
-        '<h1 class="hero-title">Welcome to Multimodal Studio Hub</h1>'
+        '<h1 class="hero-title">Let's Get Started with the Multimodal Studio Hub</h1>'
         '<p>Create an account or log in to reach the resource library, lesson plans, exemplars, and project spaces.</p>'
         '<p class="auth-caption">Accounts use a user ID and password. If you forget your password, contact the site administrator.</p>'
         '</section>',
