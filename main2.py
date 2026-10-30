@@ -1307,7 +1307,7 @@ PAGES = {
 
 
 def show_welcome_splash():
-    """Show a welcome splash once per unauthenticated session, then continue to login."""
+    """Show a welcome splash and let visitors continue to login when ready."""
     if st.session_state.get("welcome_splash_shown"):
         return
     st.session_state["welcome_splash_shown"] = True
@@ -1324,11 +1324,13 @@ def show_welcome_splash():
     else:
         st.video("https://www.youtube.com/watch?v=j28H9btX5vs")
 
-    countdown = st.empty()
-    for seconds_left in range(8, 0, -1):
-        countdown.caption(f"Continuing to sign in in {seconds_left} seconds…")
-        time.sleep(1)
-    countdown.empty()
+    left, center, right = st.columns([1, 1.4, 1])
+    center.button(
+        "▶ Begin Here",
+        key="welcome_begin",
+        type="primary",
+        use_container_width=True,
+    )
 
 
 def main():
