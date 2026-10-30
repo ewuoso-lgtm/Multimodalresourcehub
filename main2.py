@@ -114,14 +114,14 @@ h1, h2, h3, h4, h5 { font-family: 'Fraunces', Georgia, serif !important; color: 
 
 /* Welcome splash: keep the About image behind the title, video, and Begin Here button. */
 .stApp:has(.welcome-splash) [data-testid="stAppViewContainer"] {
-  background: linear-gradient(90deg, rgba(10,16,31,.45) 0%, rgba(10,16,31,.32) 30%, rgba(10,16,31,.07) 100%), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/about-page-hero.jpg") center / cover no-repeat fixed;
+  background: linear-gradient(90deg, rgba(10,16,31,.405) 0%, rgba(10,16,31,.288) 30%, rgba(10,16,31,.063) 100%), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/about-page-hero.jpg") center / cover no-repeat fixed;
 }
 .stApp:has(.welcome-splash) [data-testid="stMain"],
 .stApp:has(.welcome-splash) [data-testid="stHeader"] { background: transparent; }
 .stApp:has(.welcome-splash) [data-testid="stMainBlockContainer"] { min-height: 100vh; background: transparent; }
 @media (max-width: 640px) {
   .stApp:has(.welcome-splash) [data-testid="stAppViewContainer"] {
-    background-image: linear-gradient(rgba(10,16,31,.39), rgba(10,16,31,.39)), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/about-page-hero.jpg");
+    background-image: linear-gradient(rgba(10,16,31,.351), rgba(10,16,31,.351)), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/about-page-hero.jpg");
     background-position: center;
     background-attachment: scroll;
   }
