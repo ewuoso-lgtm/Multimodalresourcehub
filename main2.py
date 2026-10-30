@@ -1360,7 +1360,7 @@ def show_welcome_splash():
         return
 
     st.markdown(
-        '<div class="hero"><h1 class="hero-title">Welcome to the Multimodal Studio Hub</h1>'
+        '<div class="hero hero-home"><h1 class="hero-title">Welcome to the Multimodal Studio Hub</h1>'
         '<p>Explore resources for creating, teaching, and learning through text, audio, video, and interactive media.</p></div>',
         unsafe_allow_html=True,
     )
