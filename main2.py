@@ -210,6 +210,17 @@ table.rubric th.crit { background: var(--lavender); color: var(--plum); border-t
   .hero { border-radius: 16px; }
   .chip b { font-size: 1.25rem; }
 }
+@keyframes begin-here-pulse {
+  0%, 100% { filter: brightness(1); box-shadow: 0 0 0 0 rgba(255,107,91,0); }
+  50% { filter: brightness(1.14); box-shadow: 0 0 0 7px rgba(255,107,91,.24); }
+}
+.st-key-welcome_begin [data-testid="stBaseButton-primary"] {
+  animation: begin-here-pulse 1.5s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .st-key-welcome_begin [data-testid="stBaseButton-primary"] { animation: none; }
+}
+
 </style>
 """
 
