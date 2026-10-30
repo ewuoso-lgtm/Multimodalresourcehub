@@ -119,13 +119,6 @@ h1, h2, h3, h4, h5 { font-family: 'Fraunces', Georgia, serif !important; color: 
 .stApp:has(.welcome-splash) [data-testid="stMain"],
 .stApp:has(.welcome-splash) [data-testid="stHeader"] { background: transparent; }
 .stApp:has(.welcome-splash) [data-testid="stMainBlockContainer"] { min-height: 100vh; background: transparent; }
-.stApp:has(.welcome-splash) .hero.hero-home {
-  background: transparent;
-  border-color: rgba(255,255,255,.24);
-  color: #fff;
-}
-.stApp:has(.welcome-splash) .hero.hero-home h1,
-.stApp:has(.welcome-splash) .hero.hero-home p { color: #fff; }
 @media (max-width: 640px) {
   .stApp:has(.welcome-splash) [data-testid="stAppViewContainer"] {
     background-image: linear-gradient(rgba(10,16,31,.82), rgba(10,16,31,.82)), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/about-page-hero.jpg");
