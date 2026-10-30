@@ -111,6 +111,28 @@ h1, h2, h3, h4, h5 { font-family: 'Fraunces', Georgia, serif !important; color: 
 @media (max-width: 640px) {
   .hero.hero-home { background-image: linear-gradient(rgba(22,33,62,.82), rgba(22,33,62,.74)), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/home-hero.jpg"); background-position: center; min-height: 0; }
 }
+
+/* Welcome splash: keep the About image behind the title, video, and Begin Here button. */
+.stApp:has(.welcome-splash) [data-testid="stAppViewContainer"] {
+  background: linear-gradient(90deg, rgba(10,16,31,.94) 0%, rgba(10,16,31,.82) 42%, rgba(10,16,31,.30) 100%), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/about-page-hero.jpg") center / cover no-repeat fixed;
+}
+.stApp:has(.welcome-splash) [data-testid="stMain"],
+.stApp:has(.welcome-splash) [data-testid="stHeader"] { background: transparent; }
+.stApp:has(.welcome-splash) [data-testid="stMainBlockContainer"] { min-height: 100vh; background: transparent; }
+.stApp:has(.welcome-splash) .hero.hero-home {
+  background: transparent;
+  border-color: rgba(255,255,255,.24);
+  color: #fff;
+}
+.stApp:has(.welcome-splash) .hero.hero-home h1,
+.stApp:has(.welcome-splash) .hero.hero-home p { color: #fff; }
+@media (max-width: 640px) {
+  .stApp:has(.welcome-splash) [data-testid="stAppViewContainer"] {
+    background-image: linear-gradient(rgba(10,16,31,.82), rgba(10,16,31,.82)), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/about-page-hero.jpg");
+    background-position: center;
+    background-attachment: scroll;
+  }
+}
 .hero.search-resources-hero { background: linear-gradient(90deg, rgba(22,33,62,.94) 0%, rgba(22,33,62,.82) 44%, rgba(22,33,62,.16) 100%), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/search-resources-hero.jpg") center / cover no-repeat; min-height: 300px; border: 1px solid rgba(255,255,255,.24); }
 @media (max-width: 640px) {
   .hero.search-resources-hero { background-image: linear-gradient(rgba(22,33,62,.82), rgba(22,33,62,.74)), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/search-resources-hero.jpg"); background-position: center; min-height: 0; }
@@ -1370,7 +1392,7 @@ def show_welcome_splash():
         return
 
     st.markdown(
-        '<div class="hero hero-home"><h1 class="hero-title">Welcome to the Multimodal Studio Hub</h1>'
+        '<div class="hero hero-home welcome-splash"><h1 class="hero-title">Welcome to the Multimodal Studio Hub</h1>'
         '<p>Explore resources for creating, teaching, and learning through text, audio, video, and interactive media.</p></div>',
         unsafe_allow_html=True,
     )
