@@ -796,10 +796,11 @@ def page_about():
     st.markdown("""
     <style>
     .about-hero {
-        display: grid; grid-template-columns: 1.35fr 1fr; align-items: center;
-        gap: 32px; padding: clamp(24px, 5vw, 56px); margin-bottom: var(--s6);
-        color: #fff; background: radial-gradient(circle at 85% 15%, rgba(255,107,91,.42), transparent 32%),
-        radial-gradient(circle at 95% 100%, rgba(31,163,154,.38), transparent 35%), var(--plum);
+        display: flex; align-items: center; min-height: 320px;
+        padding: clamp(24px, 5vw, 56px); margin-bottom: var(--s6);
+        color: #fff;
+        background: linear-gradient(90deg, rgba(22,33,62,.95) 0%, rgba(22,33,62,.82) 44%, rgba(22,33,62,.12) 100%),
+        url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/about-page-hero.jpg") center / cover no-repeat;
         border-radius: 20px; overflow: hidden;
     }
     .about-hero h1 { color: #fff !important; margin: 0 0 var(--s3); }
@@ -818,7 +819,11 @@ def page_about():
         background: linear-gradient(135deg, #4B3A7A, #1FA39A); color: white;
         font: 700 2.5rem 'Fraunces', Georgia, serif; }
     @media (max-width: 700px) {
-        .about-hero { grid-template-columns: 1fr; }
+        .about-hero {
+            background-image: linear-gradient(rgba(22,33,62,.86), rgba(22,33,62,.80)),
+            url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/about-page-hero.jpg");
+            background-position: center; min-height: 280px;
+        }
         .media-tile { min-height: 86px; }
     }
     </style>
@@ -826,12 +831,6 @@ def page_about():
       <div>
         <h1 id="about-title">Many ways to make meaning</h1>
         <p>The Multimodal Studio Hub brings together practical resources, examples, and teaching ideas for creating with text, sound, video, and interactive media.</p>
-      </div>
-      <div class="media-collage" role="img" aria-label="A collage representing text, audio, video, and interactive media">
-        <div class="media-tile"><span aria-hidden="true">✍️</span><small>Text</small></div>
-        <div class="media-tile"><span aria-hidden="true">🎙️</span><small>Audio</small></div>
-        <div class="media-tile"><span aria-hidden="true">🎬</span><small>Video</small></div>
-        <div class="media-tile"><span aria-hidden="true">🖱️</span><small>Interactive</small></div>
       </div>
     </section>
     """, unsafe_allow_html=True)
