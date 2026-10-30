@@ -112,6 +112,18 @@ h1, h2, h3, h4, h5 { font-family: 'Fraunces', Georgia, serif !important; color: 
   .hero.hero-home { background-image: linear-gradient(rgba(22,33,62,.82), rgba(22,33,62,.74)), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/home-hero.jpg"); background-position: center; min-height: 0; }
 }
 
+/* Reveal the welcome hero after a real two-second client-side delay. */
+@keyframes welcome-hero-reveal {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.stApp:has(.welcome-splash) .welcome-splash {
+  animation: welcome-hero-reveal .55s ease 2s both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .stApp:has(.welcome-splash) .welcome-splash { animation: none; }
+}
+
 /* Welcome splash: keep the About image behind the title, video, and Begin Here button. */
 .stApp:has(.welcome-splash) [data-testid="stAppViewContainer"] {
   background: linear-gradient(90deg, rgba(10,16,31,.405) 0%, rgba(10,16,31,.288) 30%, rgba(10,16,31,.063) 100%), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/about-page-hero.jpg") center / cover no-repeat fixed;
@@ -1384,8 +1396,6 @@ def show_welcome_splash():
     if st.session_state.get("welcome_splash_shown"):
         return
 
-    # Delay the welcome hero briefly before revealing it.
-    time.sleep(2)
     st.markdown(
         '<div class="hero hero-home welcome-splash"><h1 class="hero-title">Welcome to the Multimodal Studio Hub</h1>'
         '<p>Explore resources for creating, teaching, and learning through text, audio, video, and interactive media.</p></div>',
