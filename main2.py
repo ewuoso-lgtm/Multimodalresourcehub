@@ -494,7 +494,7 @@ RUBRICS = [
               "Some accessibility needs are met.", "Accessibility is not addressed."),
          crit("Sources and attribution", 20, "All sources are credited on the page.", "Most sources are credited.",
               "Some credits are missing.", "Sources are not credited."),
-     ]},,
+     ]},
     {"id": "comics-rubric", "title": "Comics Rubric", "genre": "Comics",
      "description": "Assesses a comic for storytelling, panel flow, text-image integration, and craft.",
      "criteria": [
