@@ -1384,6 +1384,8 @@ def show_welcome_splash():
     if st.session_state.get("welcome_splash_shown"):
         return
 
+    # Delay the welcome hero briefly before revealing it.
+    time.sleep(2)
     st.markdown(
         '<div class="hero hero-home welcome-splash"><h1 class="hero-title">Welcome to the Multimodal Studio Hub</h1>'
         '<p>Explore resources for creating, teaching, and learning through text, audio, video, and interactive media.</p></div>',
