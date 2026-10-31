@@ -490,11 +490,11 @@ def render_auth_page():
     st.html("""
     <section class="auth-hero">
       <h1 class="hero-title" id="auth-welcome-title"
-          aria-label="Let's Get Started with the Multimodal Studio Hub"></h1>
+          aria-label="Let's Get Started with the Multimodal Studio Hub">Let's Get Started with the Multimodal Studio Hub</h1>
       <p id="auth-welcome-description"
-         aria-label="Create an account or log in to reach the resource library, lesson plans, exemplars, and project spaces."></p>
+         aria-label="Create an account or log in to reach the resource library, lesson plans, exemplars, and project spaces.">Create an account or log in to reach the resource library, lesson plans, exemplars, and project spaces.</p>
       <p class="auth-caption" id="auth-welcome-caption"
-         aria-label="Accounts use a user ID and password. If you forget your password, contact the site administrator."></p>
+         aria-label="Accounts use a user ID and password. If you forget your password, contact the site administrator.">Accounts use a user ID and password. If you forget your password, contact the site administrator.</p>
     </section>
 
     <script>
@@ -516,9 +516,18 @@ def render_auth_page():
       }
     }
 
-    typeText(document.getElementById("auth-welcome-title"), title)
-      .then(() => typeText(document.getElementById("auth-welcome-description"), description))
-      .then(() => typeText(document.getElementById("auth-welcome-caption"), accountNote));
+    const titleElement = document.getElementById("auth-welcome-title");
+    const descriptionElement = document.getElementById("auth-welcome-description");
+    const noteElement = document.getElementById("auth-welcome-caption");
+
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      titleElement.textContent = "";
+      descriptionElement.textContent = "";
+      noteElement.textContent = "";
+      typeText(titleElement, title)
+        .then(() => typeText(descriptionElement, description))
+        .then(() => typeText(noteElement, accountNote));
+    }
     </script>
     """, unsafe_allow_javascript=True)
 
