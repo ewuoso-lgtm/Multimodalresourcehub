@@ -487,14 +487,40 @@ def render_login_form():
 
 def render_auth_page():
     """Show signup and login tabs with music for signed-out visitors."""
-    st.markdown(
-        '<section class="auth-hero">'
-        "<h1 class=\"hero-title\">Let's Get Started with the Multimodal Studio Hub</h1>"
-        '<p>Create an account or log in to reach the resource library, lesson plans, exemplars, and project spaces.</p>'
-        '<p class="auth-caption">Accounts use a user ID and password. If you forget your password, contact the site administrator.</p>'
-        '</section>',
-        unsafe_allow_html=True,
-    )
+    st.html("""
+    <section class="auth-hero">
+      <h1 class="hero-title" id="auth-welcome-title"
+          aria-label="Let's Get Started with the Multimodal Studio Hub"></h1>
+      <p id="auth-welcome-description"
+         aria-label="Create an account or log in to reach the resource library, lesson plans, exemplars, and project spaces."></p>
+      <p class="auth-caption" id="auth-welcome-caption"
+         aria-label="Accounts use a user ID and password. If you forget your password, contact the site administrator."></p>
+    </section>
+
+    <script>
+    const title = "Let's Get Started with the Multimodal Studio Hub";
+    const description =
+      "Create an account or log in to reach the resource library, lesson plans, exemplars, and project spaces.";
+    const accountNote =
+      "Accounts use a user ID and password. If you forget your password, contact the site administrator.";
+
+    async function typeText(element, text, delay = 12) {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        element.textContent = text;
+        return;
+      }
+
+      for (const character of text) {
+        element.textContent += character;
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+    }
+
+    typeText(document.getElementById("auth-welcome-title"), title)
+      .then(() => typeText(document.getElementById("auth-welcome-description"), description))
+      .then(() => typeText(document.getElementById("auth-welcome-caption"), accountNote));
+    </script>
+    """, unsafe_allow_javascript=True)
 
     if not database_url():
         st.warning(
