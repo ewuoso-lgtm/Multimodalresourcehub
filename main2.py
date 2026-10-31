@@ -1448,8 +1448,7 @@ def show_welcome_splash():
         unsafe_allow_html=True,
     )
 
-    # Stage the welcome content: reveal the video after five seconds, then the button two seconds later.
-    time.sleep(5)
+    # Show the video immediately with its swivel landing animation; reveal the button two seconds later.
     intro_video = Path("assets/welcome-intro.mp4")
     if intro_video.is_file():
         st.video(str(intro_video))
