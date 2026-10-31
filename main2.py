@@ -133,7 +133,7 @@ h1, h2, h3, h4, h5 { font-family: 'Fraunces', Georgia, serif !important; color: 
   to { opacity: 1; transform: translateY(0); }
 }
 .stApp:has(.welcome-splash) .welcome-splash {
-  animation: welcome-hero-reveal .55s ease 2s both;
+  animation: welcome-hero-reveal .35s ease both;
 }
 @media (prefers-reduced-motion: reduce) {
   .stApp:has(.welcome-splash) .welcome-splash { animation: none; }
@@ -1442,11 +1442,35 @@ def show_welcome_splash():
     if st.session_state.get("welcome_splash_shown"):
         return
 
-    st.markdown(
-        '<div class="hero hero-home welcome-splash"><h1 class="hero-title">Welcome to the Multimodal Studio Hub</h1>'
-        '<p>Explore resources for creating, teaching, and learning through text, audio, video, and interactive media.</p></div>',
-        unsafe_allow_html=True,
-    )
+    st.html("""
+    <div class="hero hero-home welcome-splash">
+      <h1 class="hero-title" id="welcome-title"
+          aria-label="Welcome to the Multimodal Studio Hub"></h1>
+      <p id="welcome-description"
+         aria-label="Explore resources for creating, teaching, and learning through text, audio, video, and interactive media."></p>
+    </div>
+
+    <script>
+    const title = "Welcome to the Multimodal Studio Hub";
+    const description =
+      "Explore resources for creating, teaching, and learning through text, audio, video, and interactive media.";
+
+    async function typeText(element, text, delay = 12) {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        element.textContent = text;
+        return;
+      }
+
+      for (const character of text) {
+        element.textContent += character;
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+    }
+
+    typeText(document.getElementById("welcome-title"), title)
+      .then(() => typeText(document.getElementById("welcome-description"), description));
+    </script>
+    """, unsafe_allow_javascript=True)
 
     # Show the video immediately with its swivel landing animation; reveal the button two seconds later.
     intro_video = Path("assets/welcome-intro.mp4")
