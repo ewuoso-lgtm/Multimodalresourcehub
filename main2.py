@@ -105,6 +105,21 @@ h1, h2, h3, h4, h5 { font-family: 'Fraunces', Georgia, serif !important; color: 
   }
 }
 
+/* Shared copyright footer */
+.site-footer {
+  margin-top: clamp(24px, 5vh, 48px);
+  padding: 18px 12px;
+  border-top: 1px solid rgba(45,30,79,.14);
+  color: #665f70;
+  font-size: .88rem;
+  line-height: 1.5;
+  text-align: center;
+}
+.stApp:has(.welcome-splash) .site-footer {
+  border-top-color: rgba(255,255,255,.24);
+  color: rgba(255,255,255,.9);
+}
+
 /* Hero banner (Home) */
 .hero { background: radial-gradient(circle at 88% 16%, rgba(255,107,91,.55), transparent 38%), radial-gradient(circle at 100% 100%, rgba(31,163,154,.45), transparent 34%), var(--plum); border-radius: 20px; padding: clamp(24px, 5vw, 56px); margin-bottom: var(--s4); }
 .hero.hero-home { background: linear-gradient(90deg, rgba(22,33,62,.94) 0%, rgba(22,33,62,.82) 44%, rgba(22,33,62,.16) 100%), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/home-hero.jpg") center / cover no-repeat; min-height: 350px; border: 1px solid rgba(255,255,255,.24); }
@@ -1391,6 +1406,14 @@ PAGES = {
 }
 
 
+def render_copyright_footer():
+    """Show the site copyright notice at the bottom of the current page."""
+    st.markdown(
+        '<footer class="site-footer">Copyright &copy; 2026 The Multimodal Studio Hub. All Rights Reserved</footer>',
+        unsafe_allow_html=True,
+    )
+
+
 def show_welcome_splash():
     """Show only the welcome intro until the visitor chooses to continue."""
     if st.session_state.get("welcome_splash_shown"):
@@ -1420,6 +1443,8 @@ def show_welcome_splash():
     ):
         st.session_state["welcome_splash_shown"] = True
         st.rerun()
+
+    render_copyright_footer()
 
 
 def main():
@@ -1457,6 +1482,7 @@ def main():
     )
 
     PAGES[st.session_state["nav"]]()
+    render_copyright_footer()
 
     # Show a brief click ring across the Streamlit app.
     components.html(
