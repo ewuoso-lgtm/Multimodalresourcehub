@@ -180,24 +180,38 @@ h1, h2, h3, h4, h5 { font-family: 'Fraunces', Georgia, serif !important; color: 
     background-attachment: scroll;
   }
 }
-.hero.search-resources-hero { background: linear-gradient(90deg, rgba(22,33,62,.94) 0%, rgba(22,33,62,.82) 44%, rgba(22,33,62,.16) 100%), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/search-resources-hero.jpg") center / cover no-repeat; min-height: 300px; border: 1px solid rgba(255,255,255,.24); }
+.hero.search-resources-hero, .st-key-search-resources-hero { background: linear-gradient(90deg, rgba(22,33,62,.94) 0%, rgba(22,33,62,.82) 44%, rgba(22,33,62,.16) 100%), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/search-resources-hero.jpg") center / cover no-repeat; min-height: 300px; border: 1px solid rgba(255,255,255,.24); }
 @media (max-width: 640px) {
-  .hero.search-resources-hero { background-image: linear-gradient(rgba(22,33,62,.82), rgba(22,33,62,.74)), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/search-resources-hero.jpg"); background-position: center; min-height: 0; }
+  .hero.search-resources-hero, .st-key-search-resources-hero { background-image: linear-gradient(rgba(22,33,62,.82), rgba(22,33,62,.74)), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/search-resources-hero.jpg"); background-position: center; min-height: 0; }
 }
-.hero.browse-exemplars-hero { background: linear-gradient(90deg, rgba(22,33,62,.94) 0%, rgba(22,33,62,.82) 44%, rgba(22,33,62,.16) 100%), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/browse-exemplars-hero.jpg") center / cover no-repeat; min-height: 300px; border: 1px solid rgba(255,255,255,.24); }
+.hero.browse-exemplars-hero, .st-key-browse-exemplars-hero { background: linear-gradient(90deg, rgba(22,33,62,.94) 0%, rgba(22,33,62,.82) 44%, rgba(22,33,62,.16) 100%), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/browse-exemplars-hero.jpg") center / cover no-repeat; min-height: 300px; border: 1px solid rgba(255,255,255,.24); }
 @media (max-width: 640px) {
-  .hero.browse-exemplars-hero { background-image: linear-gradient(rgba(22,33,62,.82), rgba(22,33,62,.74)), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/browse-exemplars-hero.jpg"); background-position: center; min-height: 0; }
+  .hero.browse-exemplars-hero, .st-key-browse-exemplars-hero { background-image: linear-gradient(rgba(22,33,62,.82), rgba(22,33,62,.74)), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/browse-exemplars-hero.jpg"); background-position: center; min-height: 0; }
 }
-.hero.lesson-plans-hero { background: linear-gradient(90deg, rgba(22,33,62,.94) 0%, rgba(22,33,62,.82) 44%, rgba(22,33,62,.16) 100%), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/lesson-plans-hero.jpg") center / cover no-repeat; min-height: 300px; border: 1px solid rgba(255,255,255,.24); }
+.hero.lesson-plans-hero, .st-key-lesson-plans-hero { background: linear-gradient(90deg, rgba(22,33,62,.94) 0%, rgba(22,33,62,.82) 44%, rgba(22,33,62,.16) 100%), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/lesson-plans-hero.jpg") center / cover no-repeat; min-height: 300px; border: 1px solid rgba(255,255,255,.24); }
 @media (max-width: 640px) {
-  .hero.lesson-plans-hero { background-image: linear-gradient(rgba(22,33,62,.82), rgba(22,33,62,.74)), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/lesson-plans-hero.jpg"); background-position: center; min-height: 0; }
+  .hero.lesson-plans-hero, .st-key-lesson-plans-hero { background-image: linear-gradient(rgba(22,33,62,.82), rgba(22,33,62,.74)), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/lesson-plans-hero.jpg"); background-position: center; min-height: 0; }
 }
-.hero.rubrics-hero { background: linear-gradient(90deg, rgba(22,33,62,.94) 0%, rgba(22,33,62,.82) 44%, rgba(22,33,62,.16) 100%), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/rubrics-hero.jpg") center / cover no-repeat; min-height: 300px; border: 1px solid rgba(255,255,255,.24); }
+.hero.rubrics-hero, .st-key-rubrics-hero { background: linear-gradient(90deg, rgba(22,33,62,.94) 0%, rgba(22,33,62,.82) 44%, rgba(22,33,62,.16) 100%), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/rubrics-hero.jpg") center / cover no-repeat; min-height: 300px; border: 1px solid rgba(255,255,255,.24); }
 @media (max-width: 640px) {
-  .hero.rubrics-hero { background-image: linear-gradient(rgba(22,33,62,.82), rgba(22,33,62,.74)), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/rubrics-hero.jpg"); background-position: center; min-height: 0; }
+  .hero.rubrics-hero, .st-key-rubrics-hero { background-image: linear-gradient(rgba(22,33,62,.82), rgba(22,33,62,.74)), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/rubrics-hero.jpg"); background-position: center; min-height: 0; }
 }
 .stApp h1.hero-title { font-size: clamp(1.8rem, 1.2rem + 2.6vw, 3rem) !important; line-height: 1.12; color: #FFFFFF !important; max-width: 20ch; margin: 0 0 var(--s3); padding: 0; }
 .hero p { color: #E6DFF5 !important; font-size: 1.05rem; max-width: 56ch; margin: 0; }
+.st-key-search-resources-hero, .st-key-browse-exemplars-hero,
+.st-key-lesson-plans-hero, .st-key-rubrics-hero {
+  border-radius: 20px; padding: clamp(24px, 5vw, 56px); margin-bottom: var(--s4);
+  display: flex; flex-direction: column; justify-content: center;
+}
+.st-key-search-resources-hero h1, .st-key-browse-exemplars-hero h1,
+.st-key-lesson-plans-hero h1, .st-key-rubrics-hero h1 {
+  font-size: clamp(1.8rem, 1.2rem + 2.6vw, 3rem); line-height: 1.12;
+  color: #fff; max-width: 20ch; margin: 0 0 var(--s3);
+}
+.st-key-search-resources-hero p, .st-key-browse-exemplars-hero p,
+.st-key-lesson-plans-hero p, .st-key-rubrics-hero p {
+  color: #E6DFF5; font-size: 1.05rem; max-width: 56ch; margin: 0;
+}
 .chips { display: flex; flex-wrap: wrap; gap: var(--s3); margin-top: var(--s5); }
 .chip { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.3); border-radius: 12px; padding: var(--s2) var(--s4); color: #FFFFFF; font-size: .95rem; }
 .chip b { font-family: 'Fraunces', Georgia, serif; font-size: 1.5rem; margin-right: var(--s2); }
@@ -277,6 +291,8 @@ table.rubric th.crit { background: var(--lavender); color: var(--plum); border-t
 @media (max-width: 640px) {
   .block-container, [data-testid="stMainBlockContainer"] { padding: var(--s4) var(--s4) var(--s6); }
   .hero { border-radius: 16px; }
+  .st-key-search-resources-hero, .st-key-browse-exemplars-hero,
+  .st-key-lesson-plans-hero, .st-key-rubrics-hero { border-radius: 16px; padding: 24px; }
   .chip b { font-size: 1.25rem; }
 }
 @keyframes begin-here-pulse {
@@ -742,13 +758,19 @@ def render_resource_card(r):
         render_related_resources("resource", r["genre"], r["title"])
 
 
+def typewriter_chunks(text, delay=0.012):
+    """Yield text in short chunks for Streamlit's native typewriter effect."""
+    for character in text:
+        yield character
+        time.sleep(delay)
+
+
 def page_header(title, blurb, hero_class=None):
     """Render a standard page heading, or a photo hero when a class is supplied."""
     if hero_class:
-        st.markdown(
-            f'<div class="hero {hero_class}"><h1 class="hero-title">{esc(title)}</h1><p>{esc(blurb)}</p></div>',
-            unsafe_allow_html=True,
-        )
+        with st.container(key=hero_class):
+            st.write_stream(typewriter_chunks(f"# {title}"))
+            st.write_stream(typewriter_chunks(blurb))
     else:
         st.title(title)
         st.markdown(f'<p class="lead">{esc(blurb)}</p>', unsafe_allow_html=True)
@@ -864,7 +886,7 @@ def page_about():
     """About page for the Multimodal Studio Hub."""
     st.markdown("""
     <style>
-    .about-hero {
+    .about-hero, .st-key-about_hero {
         display: flex; align-items: center; min-height: 320px;
         padding: clamp(24px, 5vw, 56px); margin-bottom: var(--s6);
         color: #fff;
@@ -872,8 +894,8 @@ def page_about():
         url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/about-page-hero.jpg") center / cover no-repeat;
         border-radius: 20px; overflow: hidden;
     }
-    .about-hero h1 { color: #fff !important; margin: 0 0 var(--s3); }
-    .about-hero p { color: #F6F3FC !important; font-size: 1.05rem; max-width: 52ch; }
+    .about-hero h1, .st-key-about_hero h1 { color: #fff !important; margin: 0 0 var(--s3); }
+    .about-hero p, .st-key-about_hero p { color: #F6F3FC !important; font-size: 1.05rem; max-width: 52ch; }
     .media-collage { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; transform: rotate(2deg); }
     .media-tile { min-height: 118px; display: flex; flex-direction: column; justify-content: center;
         align-items: center; border: 1px solid rgba(255,255,255,.3); border-radius: 16px;
@@ -888,7 +910,7 @@ def page_about():
         background: linear-gradient(135deg, #4B3A7A, #1FA39A); color: white;
         font: 700 2.5rem 'Fraunces', Georgia, serif; }
     @media (max-width: 700px) {
-        .about-hero {
+        .about-hero, .st-key-about_hero {
             background-image: linear-gradient(rgba(22,33,62,.86), rgba(22,33,62,.80)),
             url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/about-page-hero.jpg");
             background-position: center; min-height: 280px;
@@ -896,13 +918,14 @@ def page_about():
         .media-tile { min-height: 86px; }
     }
     </style>
-    <section class="about-hero" aria-labelledby="about-title">
-      <div>
-        <h1 id="about-title">Many ways to make meaning</h1>
-        <p>The Multimodal Studio Hub brings together practical resources, examples, and teaching ideas for creating with text, sound, video, and interactive media.</p>
-      </div>
-    </section>
     """, unsafe_allow_html=True)
+
+    with st.container(key="about_hero"):
+        st.write_stream(typewriter_chunks("# Many ways to make meaning"))
+        st.write_stream(typewriter_chunks(
+            "The Multimodal Studio Hub brings together practical resources, examples, and teaching ideas for creating with text, sound, video, and interactive media."
+        ))
+
 
     # The Why Block
     st.header("Why multimodal learning?")
