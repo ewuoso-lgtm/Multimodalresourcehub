@@ -415,6 +415,15 @@ def render_onboarding(user):
     else:
         c2.button("Start exploring", key="tut_finish", type="primary", on_click=complete_onboarding)
     c3.button("Skip tutorial", key="tut_skip", on_click=complete_onboarding)
+    render_copyright_footer()
+
+
+def render_copyright_footer():
+    """Show the same copyright notice on authentication and onboarding screens."""
+    st.markdown(
+        '<footer class="site-footer">Copyright &copy; 2026 The Multimodal Studio Hub. All Rights Reserved</footer>',
+        unsafe_allow_html=True,
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -544,6 +553,8 @@ def render_auth_page():
         render_login_form()
     with tab_signup:
         render_signup_form()
+
+    render_copyright_footer()
 
 
 # ---------------------------------------------------------------------------
