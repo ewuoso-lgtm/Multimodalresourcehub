@@ -487,49 +487,27 @@ def render_login_form():
 
 def render_auth_page():
     """Show signup and login tabs with music for signed-out visitors."""
-    st.html("""
-    <section class="auth-hero">
-      <h1 class="hero-title" id="auth-welcome-title"
-          aria-label="Let's Get Started with the Multimodal Studio Hub">Let's Get Started with the Multimodal Studio Hub</h1>
-      <p id="auth-welcome-description"
-         aria-label="Create an account or log in to reach the resource library, lesson plans, exemplars, and project spaces.">Create an account or log in to reach the resource library, lesson plans, exemplars, and project spaces.</p>
-      <p class="auth-caption" id="auth-welcome-caption"
-         aria-label="Accounts use a user ID and password. If you forget your password, contact the site administrator.">Accounts use a user ID and password. If you forget your password, contact the site administrator.</p>
-    </section>
+    title = "Let's Get Started with the Multimodal Studio Hub"
+    description = (
+        "Create an account or log in to reach the resource library, lesson plans, "
+        "exemplars, and project spaces."
+    )
+    account_note = (
+        "Accounts use a user ID and password. If you forget your password, "
+        "contact the site administrator."
+    )
 
-    <script>
-    const title = "Let's Get Started with the Multimodal Studio Hub";
-    const description =
-      "Create an account or log in to reach the resource library, lesson plans, exemplars, and project spaces.";
-    const accountNote =
-      "Accounts use a user ID and password. If you forget your password, contact the site administrator.";
+    def typewriter(text):
+        """Yield short text chunks for Streamlit's native typewriter rendering."""
+        for character in text:
+            yield character
+            time.sleep(0.012)
 
-    async function typeText(element, text, delay = 12) {
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        element.textContent = text;
-        return;
-      }
+    with st.container(key="auth_hero"):
+        st.write_stream(typewriter(f"# {title}"))
+        st.write_stream(typewriter(description))
+        st.write_stream(typewriter(account_note))
 
-      for (const character of text) {
-        element.textContent += character;
-        await new Promise(resolve => setTimeout(resolve, delay));
-      }
-    }
-
-    const titleElement = document.getElementById("auth-welcome-title");
-    const descriptionElement = document.getElementById("auth-welcome-description");
-    const noteElement = document.getElementById("auth-welcome-caption");
-
-    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      titleElement.textContent = "";
-      descriptionElement.textContent = "";
-      noteElement.textContent = "";
-      typeText(titleElement, title)
-        .then(() => typeText(descriptionElement, description))
-        .then(() => typeText(noteElement, accountNote));
-    }
-    </script>
-    """, unsafe_allow_javascript=True)
 
     if not database_url():
         st.warning(
