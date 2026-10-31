@@ -90,16 +90,20 @@ h1, h2, h3, h4, h5 { font-family: 'Fraunces', Georgia, serif !important; color: 
 [data-testid="stSidebar"] [data-testid="stCaptionContainer"] { color: var(--muted); }
 
 /* Signed-out login and signup hero */
-.auth-hero {
+.auth-hero, .st-key-auth_hero {
   background: linear-gradient(90deg, rgba(22,33,62,.96) 0%, rgba(22,33,62,.84) 42%, rgba(22,33,62,.18) 100%), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/welcome-msh-hero.jpg") center / cover no-repeat;
   min-height: 300px; border-radius: 20px; padding: clamp(24px, 5vw, 56px);
   margin-bottom: var(--s4); border: 1px solid rgba(255,255,255,.24);
   display: flex; flex-direction: column; justify-content: center;
 }
 .auth-hero .auth-caption { color: #F0ECF8 !important; font-size: .92rem; margin-top: var(--s3); }
-.auth-hero p { color: #FFFFFF !important; text-shadow: 0 1px 2px rgba(0,0,0,.28); }
+.auth-hero p, .st-key-auth_hero p { color: #FFFFFF !important; text-shadow: 0 1px 2px rgba(0,0,0,.28); }
+.st-key-auth_hero h1 {
+  font-size: clamp(1.8rem, 1.2rem + 2.6vw, 3rem);
+  line-height: 1.12; color: #FFFFFF; max-width: 20ch; margin: 0 0 var(--s3);
+}
 @media (max-width: 640px) {
-  .auth-hero {
+  .auth-hero, .st-key-auth_hero {
     background-image: linear-gradient(rgba(22,33,62,.86), rgba(22,33,62,.80)), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/welcome-msh-hero.jpg");
     background-position: center; min-height: 250px; padding: 24px;
   }
