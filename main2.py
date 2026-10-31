@@ -139,6 +139,29 @@ h1, h2, h3, h4, h5 { font-family: 'Fraunces', Georgia, serif !important; color: 
   .stApp:has(.welcome-splash) .welcome-splash { animation: none; }
 }
 
+/* Swivel the welcome video into place when Streamlit renders it. */
+@keyframes video-swivel-land {
+  0% {
+    opacity: 0;
+    transform: perspective(1100px) rotateY(-540deg) rotateX(14deg) translateY(-36px) scale(.78);
+  }
+  72% {
+    opacity: 1;
+    transform: perspective(1100px) rotateY(12deg) rotateX(-2deg) translateY(4px) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(1100px) rotateY(0) rotateX(0) translateY(0) scale(1);
+  }
+}
+.stApp:has(.welcome-splash) [data-testid="stVideo"] {
+  transform-origin: center;
+  animation: video-swivel-land 1.8s cubic-bezier(.2, .8, .2, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .stApp:has(.welcome-splash) [data-testid="stVideo"] { animation: none; }
+}
+
 /* Welcome splash: keep the About image behind the title, video, and Begin Here button. */
 .stApp:has(.welcome-splash) [data-testid="stAppViewContainer"] {
   background: linear-gradient(90deg, rgba(10,16,31,.405) 0%, rgba(10,16,31,.288) 30%, rgba(10,16,31,.063) 100%), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/about-page-hero.jpg") center / cover no-repeat fixed;
