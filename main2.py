@@ -126,9 +126,13 @@ h1, h2, h3, h4, h5 { font-family: 'Fraunces', Georgia, serif !important; color: 
 
 /* Hero banner (Home) */
 .hero { background: radial-gradient(circle at 88% 16%, rgba(255,107,91,.55), transparent 38%), radial-gradient(circle at 100% 100%, rgba(31,163,154,.45), transparent 34%), var(--plum); border-radius: 20px; padding: clamp(24px, 5vw, 56px); margin-bottom: var(--s4); }
-.hero.hero-home { background: linear-gradient(90deg, rgba(22,33,62,.94) 0%, rgba(22,33,62,.82) 44%, rgba(22,33,62,.16) 100%), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/home-hero.jpg") center / cover no-repeat; min-height: 350px; border: 1px solid rgba(255,255,255,.24); }
+.hero.hero-home, .st-key-home-hero { background: linear-gradient(90deg, rgba(22,33,62,.94) 0%, rgba(22,33,62,.82) 44%, rgba(22,33,62,.16) 100%), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/home-hero.jpg") center / cover no-repeat; min-height: 350px; border: 1px solid rgba(255,255,255,.24); }
+.st-key-home-hero { border-radius: 20px; padding: clamp(24px, 5vw, 56px); margin-bottom: var(--s4); display: flex; flex-direction: column; justify-content: center; }
+.st-key-home-hero h1 { font-size: clamp(1.8rem, 1.2rem + 2.6vw, 3rem); line-height: 1.12; color: #FFFFFF; max-width: 20ch; margin: 0 0 var(--s3); }
+.st-key-home-hero p { color: #E6DFF5; font-size: 1.05rem; max-width: 56ch; margin: 0; }
 @media (max-width: 640px) {
-  .hero.hero-home { background-image: linear-gradient(rgba(22,33,62,.82), rgba(22,33,62,.74)), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/home-hero.jpg"); background-position: center; min-height: 0; }
+  .hero.hero-home, .st-key-home-hero { background-image: linear-gradient(rgba(22,33,62,.82), rgba(22,33,62,.74)), url("https://raw.githubusercontent.com/ewuoso-lgtm/Multimodalresourcehub/main/assets/home-hero.jpg"); background-position: center; min-height: 0; }
+  .st-key-home-hero { border-radius: 16px; padding: 24px; }
 }
 
 /* Reveal the welcome hero after a real two-second client-side delay. */
@@ -843,12 +847,10 @@ def page_home():
     # Hero banner with count chips (counts come from the data, so they stay accurate)
     counts = [(len(RESOURCES), "resources"), (len(EXEMPLARS), "exemplars"), (len(LESSON_PLANS), "lesson plans"), (len(RUBRICS), "rubrics")]
     chips = "".join(f'<div class="chip"><b>{n}</b>{label}</div>' for n, label in counts)
-    st.markdown(
-        '<div class="hero hero-home"><h1 class="hero-title">Teach and learn through writing, image, sound, and video.</h1>'
-        f"<p>{greeting}{blurb}</p>"
-        f'<div class="chips">{chips}</div></div>',
-        unsafe_allow_html=True,
-    )
+    with st.container(key="home-hero"):
+        st.write_stream(typewriter_chunks("# Teach and learn through writing, image, sound, and video."))
+        st.write_stream(typewriter_chunks(f"{greeting}{blurb}"))
+        st.markdown(f'<div class="chips">{chips}</div>', unsafe_allow_html=True)
 
     # Calls to action under the hero (one primary, one secondary)
     c1, c2, _ = st.columns([1, 1, 2])
