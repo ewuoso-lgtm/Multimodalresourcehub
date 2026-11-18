@@ -935,32 +935,45 @@ def page_home():
 
     st.markdown("""
     <style>
-    @keyframes why-hub-glow {
+    @keyframes why-hub-button-glow {
       0%, 100% {
-        text-shadow: 0 0 4px rgba(255, 107, 91, .4);
+        box-shadow: 0 0 8px 2px rgba(255, 107, 91, .4);
       }
       50% {
-        text-shadow: 0 0 14px rgba(255, 107, 91, .8);
+        box-shadow: 0 0 18px 6px rgba(255, 107, 91, .75);
       }
     }
 
-    .st-key-why_multimodal_hub [data-testid="stExpander"] summary {
-      display: flex;
-      justify-content: center;
-      text-align: center;
-      animation: why-hub-glow 1.8s ease-in-out infinite;
+    .st-key-toggle_why_multimodal_hub button {
+      min-height: 3rem;
+      border-radius: 999px !important;
+      font-size: 1.05rem;
+      font-weight: 700;
+      animation: why-hub-button-glow 1.8s ease-in-out infinite;
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .st-key-why_multimodal_hub [data-testid="stExpander"] summary {
+      .st-key-toggle_why_multimodal_hub button {
         animation: none;
       }
     }
     </style>
     """, unsafe_allow_html=True)
 
-    with st.container(key="why_multimodal_hub"):
-        with st.expander("Why Multimodal Studio Hub?", expanded=False):
+    _, why_button_col, _ = st.columns([1, 2, 1])
+    if why_button_col.button(
+        "Why Multimodal Studio Hub?",
+        key="toggle_why_multimodal_hub",
+        type="primary",
+        use_container_width=True,
+    ):
+        st.session_state["show_why_multimodal_hub"] = not st.session_state.get(
+            "show_why_multimodal_hub", False
+        )
+
+
+    if st.session_state.get("show_why_multimodal_hub", False):
+        with st.container(key="why_multimodal_hub_content"):
             opening_text_col, coin_toss_gif_col = st.columns([3, 2], vertical_alignment="top")
             with opening_text_col:
                 st.markdown("""
