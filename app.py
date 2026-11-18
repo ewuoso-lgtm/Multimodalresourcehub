@@ -933,39 +933,65 @@ def page_home():
         st.write_stream(typewriter_chunks(f"{greeting}{blurb}"))
         st.markdown(f'<div class="chips">{chips}</div>', unsafe_allow_html=True)
 
-    with st.expander("Why Multimodal Studio Hub?", expanded=False):
-        opening_text_col, coin_toss_gif_col = st.columns([3, 2], vertical_alignment="top")
-        with opening_text_col:
-            st.markdown("""
-In Michael Jackson’s *Smooth Criminal*, the protagonist enters a speakeasy-like salon cloaked in stillness. The atmosphere is quiet, subdued, and almost lifeless. Then, with a simple flick of his hand, he sends a coin spinning through the air. The coin arcs across the room and lands precisely in a jukebox. In an instant, everything changes.
-            """)
-        with coin_toss_gif_col:
-            coin_toss_gif = Path(__file__).resolve().parent / "assets" / "smooth-criminal-coin-toss.gif"
-            if coin_toss_gif.is_file():
-                st.image(str(coin_toss_gif), width=240, caption="Smooth Criminal coin toss")
+    st.markdown("""
+    <style>
+    @keyframes why-hub-glow {
+      0%, 100% {
+        text-shadow: 0 0 4px rgba(255, 107, 91, .4);
+      }
+      50% {
+        text-shadow: 0 0 14px rgba(255, 107, 91, .8);
+      }
+    }
 
-        st.markdown("""
+    .st-key-why_multimodal_hub [data-testid="stExpander"] summary {
+      display: flex;
+      justify-content: center;
+      text-align: center;
+      animation: why-hub-glow 1.8s ease-in-out infinite;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .st-key-why_multimodal_hub [data-testid="stExpander"] summary {
+        animation: none;
+      }
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+    with st.container(key="why_multimodal_hub"):
+        with st.expander("Why Multimodal Studio Hub?", expanded=False):
+            opening_text_col, coin_toss_gif_col = st.columns([3, 2], vertical_alignment="top")
+            with opening_text_col:
+                st.markdown("""
+In Michael Jackson’s *Smooth Criminal*, the protagonist enters a speakeasy-like salon cloaked in stillness. The atmosphere is quiet, subdued, and almost lifeless. Then, with a simple flick of his hand, he sends a coin spinning through the air. The coin arcs across the room and lands precisely in a jukebox. In an instant, everything changes.
+                """)
+            with coin_toss_gif_col:
+                coin_toss_gif = Path(__file__).resolve().parent / "assets" / "smooth-criminal-coin-toss.gif"
+                if coin_toss_gif.is_file():
+                    st.image(str(coin_toss_gif), width=240, caption="Smooth Criminal coin toss")
+
+            st.markdown("""
 The room comes alive. Music fills the space. Movement replaces stillness. Personalities emerge. People dance, interact, and express themselves through rhythm, gesture, costume, sound, and performance. What was once a muted environment becomes a vibrant scene rich with energy, creativity, and human expression.
 
 At the center of this transformation is a seemingly ordinary artifact: a coin. Yet that small object serves as a catalyst, triggering a chain reaction that remixes the entire environment. The coin does not create the people, the music, or the energy on its own. Rather, it unlocks possibilities that were already waiting to be activated.
-        """)
+            """)
 
-        vision_text_col, vision_logo_col = st.columns([3, 1.2], vertical_alignment="center")
-        with vision_text_col:
-            st.markdown("That image inspires the vision behind the **Multimodal Studio Hub.**")
-        with vision_logo_col:
-            logo_path = Path(__file__).resolve().parent / "assets" / "msh-logo.jpg"
-            if logo_path.is_file():
-                st.image(str(logo_path), width=220, caption="Multimodal Studio Hub")
+            vision_text_col, vision_logo_col = st.columns([3, 1.2], vertical_alignment="center")
+            with vision_text_col:
+                st.markdown("That image inspires the vision behind the **Multimodal Studio Hub.**")
+            with vision_logo_col:
+                logo_path = Path(__file__).resolve().parent / "assets" / "msh-logo.jpg"
+                if logo_path.is_file():
+                    st.image(str(logo_path), width=220, caption="Multimodal Studio Hub")
 
-        st.markdown("""
+            st.markdown("""
 The Multimodal Studio Hub is designed to be that catalyst. It is a place where a seemingly ordinary idea, draft, assignment, or text can be transformed through the thoughtful use of multiple modes of communication. A piece of writing need not remain static or confined to words alone. Through sound, visuals, gesture, design, movement, spatial arrangement, and digital media, it can be remixed into something more engaging, impactful, and meaningful.
 
 The Hub seeks to help students and instructors of English communication recognize and leverage the affordances of different communicative modes, from linguistic and visual expression to audio, oral, embodied, and interactive forms. By bringing together resources, exemplars, tools, and pedagogical practices, the Hub aims to spark creativity, encourage experimentation, and breathe new life into multimodal composing.
 
 Just as a single coin sets an entire room in motion in *Smooth Criminal,* the Multimodal Studio Hub seeks to provide the inspiration, resources, and momentum that transform an initial idea into a rich and dynamic multimodal creation in a digital space.
-        """)
-
+            """)
     # Calls to action under the hero (one primary, one secondary)
     c1, c2, _ = st.columns([1, 1, 2])
     if instructor:
