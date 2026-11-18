@@ -1165,20 +1165,59 @@ def page_about():
 
 
     # The Why Block
-    st.header("Why multimodal learning?")
-    st.write("People communicate in many forms. The Hub helps learners and instructors choose, combine, and teach the formats that best serve their purpose.")
-    formats = [
-        ("✍️", "Text", "Shape ideas through writing, structure, and language."),
-        ("🎙️", "Audio", "Use voice, sound, and pacing to reach listeners."),
-        ("🎬", "Video", "Combine image, narration, and movement to tell a story."),
-        ("🖱️", "Interactive", "Invite audiences to explore, navigate, and participate."),
-    ]
-    cols = st.columns(4)
-    for i, (col, (icon, title, description)) in enumerate(zip(cols, formats)):
-        with col:
-            with card(f"about-format-{i}"):
-                st.markdown(f'<div class="format-icon" aria-hidden="true">{icon}</div><h3 class="res-title">{title}</h3>', unsafe_allow_html=True)
-                st.write(description)
+    st.markdown("""
+    <style>
+    @keyframes about-why-glow {
+      0%, 100% {
+        box-shadow: 0 0 8px 2px rgba(255, 107, 91, .4);
+      }
+      50% {
+        box-shadow: 0 0 18px 6px rgba(255, 107, 91, .75);
+      }
+    }
+
+    .st-key-toggle_about_why_multimodal_learning button {
+      min-height: 3rem;
+      border-radius: 999px !important;
+      font-size: 1.05rem;
+      font-weight: 700;
+      animation: about-why-glow 1.8s ease-in-out infinite;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .st-key-toggle_about_why_multimodal_learning button {
+        animation: none;
+      }
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+    _, about_why_button_col, _ = st.columns([1, 2, 1])
+    if about_why_button_col.button(
+        "Why multimodal learning?",
+        key="toggle_about_why_multimodal_learning",
+        type="primary",
+        use_container_width=True,
+    ):
+        st.session_state["show_about_why_multimodal_learning"] = not st.session_state.get(
+            "show_about_why_multimodal_learning", False
+        )
+
+    if st.session_state.get("show_about_why_multimodal_learning", False):
+        with st.container(key="about_why_multimodal_content"):
+            st.write("People communicate in many forms. The Hub helps learners and instructors choose, combine, and teach the formats that best serve their purpose.")
+            formats = [
+                ("✍️", "Text", "Shape ideas through writing, structure, and language."),
+                ("🎙️", "Audio", "Use voice, sound, and pacing to reach listeners."),
+                ("🎬", "Video", "Combine image, narration, and movement to tell a story."),
+                ("🖱️", "Interactive", "Invite audiences to explore, navigate, and participate."),
+            ]
+            cols = st.columns(4)
+            for i, (col, (icon, title, description)) in enumerate(zip(cols, formats)):
+                with col:
+                    with card(f"about-format-{i}"):
+                        st.markdown(f'<div class="format-icon" aria-hidden="true">{icon}</div><h3 class="res-title">{title}</h3>', unsafe_allow_html=True)
+                        st.write(description)
 
     # Our Story and Mission
     st.header("Mission 💡")
