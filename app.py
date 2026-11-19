@@ -1425,9 +1425,7 @@ def page_search():
         key="search_resources_projects",
         type="primary",
         use_container_width=True,
-        on_click=go_to,
-        args=("Project Space",),
-        help="Open the collaborative Multimodal Project Space.",
+        help="A video will be added here.",
     )
 
     # Suggested keywords
