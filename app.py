@@ -1490,6 +1490,34 @@ def page_exemplars():
         sort_by = c2.selectbox("Sort by", SORT_OPTIONS, help="Genre options group the cards under genre headings.", key="ex_sort")
         st.button("Reset filters", key="ex_reset", on_click=reset_exemplar_filters)
 
+    # Matching glowing button reserved for the future exemplar video.
+    st.markdown("""
+    <style>
+    @keyframes exemplars-projects-glow {
+      0%, 100% { box-shadow: 0 0 8px 2px rgba(255, 107, 91, .4); }
+      50% { box-shadow: 0 0 18px 6px rgba(255, 107, 91, .75); }
+    }
+    .st-key-exemplars_multimodal_projects button {
+      min-height: 3rem;
+      border-radius: 999px !important;
+      font-size: 1.05rem;
+      font-weight: 700;
+      animation: exemplars-projects-glow 1.8s ease-in-out infinite;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .st-key-exemplars_multimodal_projects button { animation: none; }
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    _, exemplars_projects_col, _ = st.columns([1, 2, 1])
+    exemplars_projects_col.button(
+        "Exemplars & Multimodal Projects",
+        key="exemplars_multimodal_projects",
+        type="primary",
+        use_container_width=True,
+        help="A video will be added here.",
+    )
+
     # Filter, then sort (two stable passes: title first, then genre, so titles stay A to Z inside each genre)
     shown = [e for e in EXEMPLARS if not genres or e["genre"] in genres]
     shown.sort(key=lambda e: e["title"])
