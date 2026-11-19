@@ -1050,6 +1050,36 @@ Just as a single coin sets an entire room in motion in *Smooth Criminal,* the Mu
 
     st.caption(f"{slide_index + 1} of {len(links)}")
 
+    # Advance the slideshow every six seconds while Home is visible.
+    components.html(
+        """
+        <script>
+        try {
+          const appWindow = window.parent;
+          const timerKey = "__mshStartHereTimer";
+          if (appWindow[timerKey]) {
+            appWindow.clearInterval(appWindow[timerKey]);
+          }
+
+          appWindow[timerKey] = appWindow.setInterval(() => {
+            const nextButton = appWindow.document.querySelector(
+              '.st-key-start_here_next button'
+            );
+            if (nextButton) {
+              nextButton.click();
+            } else {
+              appWindow.clearInterval(appWindow[timerKey]);
+              appWindow[timerKey] = null;
+            }
+          }, 6000);
+        } catch (error) {
+          // The embedded component may not be allowed to access the parent page.
+        }
+        </script>
+        """,
+        height=0,
+    )
+
     # Recently added resources
     st.header("Recently added")
     card_grid(RESOURCES[:3], render_resource_card, columns=3)
