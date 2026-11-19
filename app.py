@@ -1014,23 +1014,41 @@ Just as a single coin sets an entire room in motion in *Smooth Criminal,* the Mu
         c1.button("Search resources", key="hero_primary", type="primary", on_click=go_to, args=("Search Resources",))
         c2.button("Browse exemplars", key="hero_secondary", on_click=go_to, args=("Browse Exemplars",))
 
-    # Start-here cards: each button jumps to a section
+    # Start-here slideshow: visitors move between one resource card at a time.
     st.header("Start here")
     links = [
-        ("Search Resources", "Find a resource", "Search guides, templates, and tools by keyword and genre."),
-        ("Browse Exemplars", "See student work", "Study sample projects with instructor commentary."),
         ("Lesson Plans", "Plan a session", "Open ready-to-adapt plans with timelines and materials."),
+        ("Search Resources", "Find a resource", "Search guides, templates, and tools by keyword and genre."),
         ("Rubrics", "Choose a rubric", "Compare criteria and performance levels, then download as PDF or Word."),
+        ("Browse Exemplars", "See student work", "Study sample projects with instructor commentary."),
     ]
-    if instructor:
-        links = links[2:] + links[:2]  # instructors see lesson plans and rubrics first
-    cols = st.columns(2)
-    for i, (page, heading, text) in enumerate(links):
-        with cols[i % 2]:
-            with card(f"go-{slug(page)}"):
-                st.markdown(f'<h3 class="res-title">{esc(heading)}</h3>', unsafe_allow_html=True)
-                st.write(text)
-                st.button(f"Open {page}", key=f"go_{page}", on_click=go_to, args=(page,))
+
+    st.session_state.setdefault("start_here_index", 0)
+    slide_index = st.session_state["start_here_index"] % len(links)
+    page, heading, description = links[slide_index]
+
+    previous_col, card_col, next_col = st.columns([1, 5, 1])
+
+    if previous_col.button("← Previous", key="start_here_previous"):
+        st.session_state["start_here_index"] = (slide_index - 1) % len(links)
+        st.rerun()
+
+    with card_col:
+        with card(f"start-here-{slug(page)}"):
+            st.markdown(f'<h3 class="res-title">{esc(heading)}</h3>', unsafe_allow_html=True)
+            st.write(description)
+            st.button(
+                f"Open {page}",
+                key=f"start_here_open_{slug(page)}",
+                on_click=go_to,
+                args=(page,),
+            )
+
+    if next_col.button("Next →", key="start_here_next"):
+        st.session_state["start_here_index"] = (slide_index + 1) % len(links)
+        st.rerun()
+
+    st.caption(f"{slide_index + 1} of {len(links)}")
 
     # Recently added resources
     st.header("Recently added")
