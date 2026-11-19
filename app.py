@@ -1050,6 +1050,13 @@ Just as a single coin sets an entire room in motion in *Smooth Criminal,* the Mu
 
     st.caption(f"{slide_index + 1} of {len(links)}")
 
+    st.session_state.setdefault("start_here_paused", False)
+    pause_label = "▶ Resume slideshow" if st.session_state["start_here_paused"] else "⏸ Pause slideshow"
+    _, pause_col, _ = st.columns([2, 1, 2])
+    if pause_col.button(pause_label, key="start_here_pause_toggle", use_container_width=True):
+        st.session_state["start_here_paused"] = not st.session_state["start_here_paused"]
+        st.rerun()
+
     # Advance the slideshow every six seconds while Home is visible.
     components.html(
         """
@@ -1065,9 +1072,17 @@ Just as a single coin sets an entire room in motion in *Smooth Criminal,* the Mu
             const nextButton = appWindow.document.querySelector(
               '.st-key-start_here_next button'
             );
-            if (nextButton) {
+            const pauseButton = appWindow.document.querySelector(
+              '.st-key-start_here_pause_toggle button'
+            );
+            const isPaused = pauseButton && pauseButton.innerText.includes("Resume slideshow");
+            if (!nextButton) {
+              appWindow.clearInterval(appWindow[timerKey]);
+              appWindow[timerKey] = null;
+            } else if (!isPaused) {
               nextButton.click();
-            } else {
+            }
+            if (!nextButton) {
               appWindow.clearInterval(appWindow[timerKey]);
               appWindow[timerKey] = null;
             }
