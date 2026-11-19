@@ -1400,6 +1400,36 @@ def page_search():
     # Save this search so it appears in "Recent searches"
     remember_search(query)
 
+    # Prominent shortcut to the collaborative Project Space, below the search controls.
+    st.markdown("""
+    <style>
+    @keyframes search-projects-glow {
+      0%, 100% { box-shadow: 0 0 8px 2px rgba(255, 107, 91, .4); }
+      50% { box-shadow: 0 0 18px 6px rgba(255, 107, 91, .75); }
+    }
+    .st-key-search_resources_projects button {
+      min-height: 3rem;
+      border-radius: 999px !important;
+      font-size: 1.05rem;
+      font-weight: 700;
+      animation: search-projects-glow 1.8s ease-in-out infinite;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .st-key-search_resources_projects button { animation: none; }
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    _, projects_button_col, _ = st.columns([1, 2, 1])
+    projects_button_col.button(
+        "Resources & Multimodal Projects",
+        key="search_resources_projects",
+        type="primary",
+        use_container_width=True,
+        on_click=go_to,
+        args=("Project Space",),
+        help="Open the collaborative Multimodal Project Space.",
+    )
+
     # Suggested keywords
     st.markdown("**Suggested keywords**")
     cols = st.columns(len(SUGGESTED_KEYWORDS))
