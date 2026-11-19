@@ -1776,6 +1776,34 @@ def page_lessons():
         time_range = c3.selectbox("Estimated time", ["Any length"] + list(TIME_BUCKETS), key="lp_time", help="Class time the plan needs.")
         st.button("Reset filters", key="lp_reset", on_click=reset_plan_filters)
 
+    # Matching glowing button reserved for the future lesson planning video.
+    st.markdown("""
+    <style>
+    @keyframes lesson-planning-projects-glow {
+      0%, 100% { box-shadow: 0 0 8px 2px rgba(255, 107, 91, .4); }
+      50% { box-shadow: 0 0 18px 6px rgba(255, 107, 91, .75); }
+    }
+    .st-key-lesson_planning_projects button {
+      min-height: 3rem;
+      border-radius: 999px !important;
+      font-size: 1.05rem;
+      font-weight: 700;
+      animation: lesson-planning-projects-glow 1.8s ease-in-out infinite;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .st-key-lesson_planning_projects button { animation: none; }
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    _, lesson_projects_col, _ = st.columns([1, 2, 1])
+    lesson_projects_col.button(
+        "Planning Lessons & Multimodal Projects",
+        key="lesson_planning_projects",
+        type="primary",
+        use_container_width=True,
+        help="A video will be added here.",
+    )
+
     plans = filter_plans(LESSON_PLANS, genre, level, time_range)
 
     # Result count in a polite live region for screen readers
