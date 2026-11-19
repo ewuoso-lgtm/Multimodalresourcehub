@@ -1082,10 +1082,6 @@ Just as a single coin sets an entire room in motion in *Smooth Criminal,* the Mu
             } else if (!isPaused) {
               nextButton.click();
             }
-            if (!nextButton) {
-              appWindow.clearInterval(appWindow[timerKey]);
-              appWindow[timerKey] = null;
-            }
           }, 6000);
         } catch (error) {
           // The embedded component may not be allowed to access the parent page.
