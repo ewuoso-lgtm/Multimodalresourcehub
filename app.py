@@ -1050,47 +1050,6 @@ Just as a single coin sets an entire room in motion in *Smooth Criminal,* the Mu
 
     st.caption(f"{slide_index + 1} of {len(links)}")
 
-    st.session_state.setdefault("start_here_paused", False)
-    pause_label = "▶ Resume slideshow" if st.session_state["start_here_paused"] else "⏸ Pause slideshow"
-    _, pause_col, _ = st.columns([2, 1, 2])
-    if pause_col.button(pause_label, key="start_here_pause_toggle", use_container_width=True):
-        st.session_state["start_here_paused"] = not st.session_state["start_here_paused"]
-        st.rerun()
-
-    # Advance the slideshow every six seconds while Home is visible.
-    components.html(
-        """
-        <script>
-        try {
-          const appWindow = window.parent;
-          const timerKey = "__mshStartHereTimer";
-          if (appWindow[timerKey]) {
-            appWindow.clearInterval(appWindow[timerKey]);
-          }
-
-          appWindow[timerKey] = appWindow.setInterval(() => {
-            const nextButton = appWindow.document.querySelector(
-              '.st-key-start_here_next button'
-            );
-            const pauseButton = appWindow.document.querySelector(
-              '.st-key-start_here_pause_toggle button'
-            );
-            const isPaused = pauseButton && pauseButton.innerText.includes("Resume slideshow");
-            if (!nextButton) {
-              appWindow.clearInterval(appWindow[timerKey]);
-              appWindow[timerKey] = null;
-            } else if (!isPaused) {
-              nextButton.click();
-            }
-          }, 6000);
-        } catch (error) {
-          // The embedded component may not be allowed to access the parent page.
-        }
-        </script>
-        """,
-        height=0,
-    )
-
     # Recently added resources
     st.header("Recently added")
     card_grid(RESOURCES[:3], render_resource_card, columns=3)
