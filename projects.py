@@ -32,6 +32,7 @@ File layout
 
 import io
 import json
+import logging
 import os
 import re
 import secrets
@@ -978,6 +979,7 @@ def _run_tutor_feedback(result_key, feedback_function, *args, **kwargs):
         with st.spinner("Tutor Buddy is thinking..."):
             st.session_state[result_key] = feedback_function(api_key, *args, **kwargs)
     except Exception:
+        logging.getLogger(__name__).exception("Tutor Buddy feedback request failed")
         st.error("Tutor Buddy could not get feedback right now. Please try again in a moment.")
 
 
