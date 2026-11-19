@@ -1983,6 +1983,34 @@ def page_rubrics():
     with panel("rubrics"):
         genre = st.selectbox("Genre", ["All genres"] + RUBRIC_GENRES, key="rb_genre", help="Show the rubric for one type of project.")
 
+    # Matching glowing button reserved for the future grading video.
+    st.markdown("""
+    <style>
+    @keyframes grading-projects-glow {
+      0%, 100% { box-shadow: 0 0 8px 2px rgba(255, 107, 91, .4); }
+      50% { box-shadow: 0 0 18px 6px rgba(255, 107, 91, .75); }
+    }
+    .st-key-grading_multimodal_projects button {
+      min-height: 3rem;
+      border-radius: 999px !important;
+      font-size: 1.05rem;
+      font-weight: 700;
+      animation: grading-projects-glow 1.8s ease-in-out infinite;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .st-key-grading_multimodal_projects button { animation: none; }
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    _, grading_projects_col, _ = st.columns([1, 2, 1])
+    grading_projects_col.button(
+        "Grading & Multimodal Projects",
+        key="grading_multimodal_projects",
+        type="primary",
+        use_container_width=True,
+        help="A video will be added here.",
+    )
+
     shown = [r for r in RUBRICS if genre == "All genres" or r["genre"] == genre]
     noun = "rubric" if len(shown) == 1 else "rubrics"
     st.markdown(f'<div role="status" aria-live="polite"><strong>{len(shown)} {noun} found</strong></div>', unsafe_allow_html=True)
