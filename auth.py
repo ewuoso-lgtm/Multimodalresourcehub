@@ -551,16 +551,10 @@ def render_auth_page():
         "contact the site administrator."
     )
 
-    def typewriter(text):
-        """Yield short text chunks for Streamlit's native typewriter rendering."""
-        for character in text:
-            yield character
-            time.sleep(0.012)
-
     with st.container(key="auth_hero"):
-        st.write_stream(typewriter(f"# {title}"))
-        st.write_stream(typewriter(description))
-        st.write_stream(typewriter(account_note))
+        st.markdown(f"# {title}")
+        st.markdown(description)
+        st.markdown(account_note)
 
 
     if not database_url():
