@@ -952,13 +952,6 @@ def render_viewer_mode(link):
 # ---------------------------------------------------------------------------
 # 10. PUBLIC ENTRY POINTS (what your main file calls)
 # ---------------------------------------------------------------------------
-def _project_typewriter(text, delay=0.012):
-    """Yield characters at the same pace as the other page hero headings."""
-    for character in text:
-        yield character
-        time.sleep(delay)
-
-
 def _tutor_api_key():
     """Read the tutor's secret without exposing it in the interface."""
     try:
@@ -1127,10 +1120,8 @@ def render_projects_page(user):
     """The body of the Project Spaces sidebar page."""
     init_db()
     with st.container(key="project-space-hero"):
-        st.write_stream(_project_typewriter("# Project Space"))
-        st.write_stream(_project_typewriter(
-            "Build a multimodal page with your team, share it, and see who contributed what."
-        ))
+        st.markdown("# Project Space")
+        st.markdown("Build a multimodal page with your team, share it, and see who contributed what.")
 
     st.markdown("""
     <style>
