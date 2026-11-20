@@ -15,6 +15,7 @@ browse exemplars, plan lessons, and use rubrics for multimodal projects.
 - Browse student exemplars with instructor commentary
 - Lesson plans with objectives, timelines, and materials
 - Rubrics for common multimodal projects
+- Project space for refining multimodal projects ideas
 
 ## Run locally
     pip install -r requirements.txt
