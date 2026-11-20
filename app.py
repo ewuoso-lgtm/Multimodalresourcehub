@@ -843,19 +843,12 @@ def render_resource_card(r):
         render_related_resources("resource", r["genre"], r["title"])
 
 
-def typewriter_chunks(text, delay=0.012):
-    """Yield text in short chunks for Streamlit's native typewriter effect."""
-    for character in text:
-        yield character
-        time.sleep(delay)
-
-
 def page_header(title, blurb, hero_class=None):
     """Render a standard page heading, or a photo hero when a class is supplied."""
     if hero_class:
         with st.container(key=hero_class):
-            st.write_stream(typewriter_chunks(f"# {title}"))
-            st.write_stream(typewriter_chunks(blurb))
+            st.markdown(f"# {esc(title)}")
+            st.markdown(esc(blurb))
     else:
         st.title(title)
         st.markdown(f'<p class="lead">{esc(blurb)}</p>', unsafe_allow_html=True)
@@ -929,8 +922,8 @@ def page_home():
     counts = [(len(RESOURCES), "resources"), (len(EXEMPLARS), "exemplars"), (len(LESSON_PLANS), "lesson plans"), (len(RUBRICS), "rubrics")]
     chips = "".join(f'<div class="chip"><b>{n}</b>{label}</div>' for n, label in counts)
     with st.container(key="home-hero"):
-        st.write_stream(typewriter_chunks("# Teach and learn through writing, image, sound, and video."))
-        st.write_stream(typewriter_chunks(f"{greeting}{blurb}"))
+        st.markdown("# Teach and learn through writing, image, sound, and video.")
+        st.markdown(f"{greeting}{blurb}")
         st.markdown(f'<div class="chips">{chips}</div>', unsafe_allow_html=True)
 
     st.markdown("""
@@ -1094,10 +1087,10 @@ def page_about():
     """, unsafe_allow_html=True)
 
     with st.container(key="about_hero"):
-        st.write_stream(typewriter_chunks("# Many ways to make meaning"))
-        st.write_stream(typewriter_chunks(
+        st.markdown("# Many ways to make meaning")
+        st.markdown(
             "The Multimodal Studio Hub brings together practical resources, examples, and teaching ideas for creating with text, sound, video, and interactive media."
-        ))
+        )
 
 
     # Center the shaded 3D logo sphere directly below the About hero.
@@ -2056,33 +2049,10 @@ def show_welcome_splash():
 
     st.html("""
     <div class="hero hero-home welcome-splash">
-      <h1 class="hero-title" id="welcome-title"
-          aria-label="Welcome to the Multimodal Studio Hub"></h1>
-      <p id="welcome-description"
-         aria-label="Explore resources for creating, teaching, and learning through text, audio, video, and interactive media."></p>
+      <h1 class="hero-title">Welcome to the Multimodal Studio Hub</h1>
+      <p>Explore resources for creating, teaching, and learning through text, audio, video, and interactive media.</p>
     </div>
-
-    <script>
-    const title = "Welcome to the Multimodal Studio Hub";
-    const description =
-      "Explore resources for creating, teaching, and learning through text, audio, video, and interactive media.";
-
-    async function typeText(element, text, delay = 12) {
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        element.textContent = text;
-        return;
-      }
-
-      for (const character of text) {
-        element.textContent += character;
-        await new Promise(resolve => setTimeout(resolve, delay));
-      }
-    }
-
-    typeText(document.getElementById("welcome-title"), title)
-      .then(() => typeText(document.getElementById("welcome-description"), description));
-    </script>
-    """, unsafe_allow_javascript=True)
+    """)
 
     # Show the video immediately with its swivel landing animation; reveal the button two seconds later.
     intro_video = Path("assets/welcome-intro.mp4")
