@@ -1287,11 +1287,13 @@ def page_about():
         justify-content: center;
         width: 100%;
     }
-    .st-key-about_contact_me [data-testid="stLinkButton"] {
+    .st-key-about_contact_me [data-testid="stLinkButton"],
+    .st-key-join_msh_exchange [data-testid="stLinkButton"] {
         display: flex;
         justify-content: center;
     }
-    .st-key-about_contact_me a {
+    .st-key-about_contact_me a,
+    .st-key-join_msh_exchange a {
         display: inline-flex;
         width: max-content;
         max-width: 100%;
