@@ -1520,7 +1520,7 @@ def page_exemplars():
     """, unsafe_allow_html=True)
     _, exemplars_projects_col, _ = st.columns([1, 2, 1])
     exemplars_projects_col.button(
-        "Exemplars & Multimodal Projects",
+        "Watch: Exemplars & Multimodal Projects",
         key="exemplars_multimodal_projects",
         type="primary",
         use_container_width=True,
