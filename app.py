@@ -2116,6 +2116,7 @@ def show_welcome_splash():
         use_container_width=True,
     ):
         st.session_state["welcome_splash_shown"] = True
+        st.session_state["auth_tab"] = "Log in"
         st.rerun()
 
     if learn_col.button(
@@ -2124,7 +2125,7 @@ def show_welcome_splash():
         use_container_width=True,
     ):
         st.session_state["welcome_splash_shown"] = True
-        st.session_state["nav"] = "About"
+        st.session_state["auth_tab"] = "Sign up"
         st.rerun()
 
     render_copyright_footer()
