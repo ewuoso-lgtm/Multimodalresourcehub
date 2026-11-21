@@ -2088,6 +2088,11 @@ def show_welcome_splash():
     render_copyright_footer()
 
 
+def set_tutorial_visibility(state_key, is_visible):
+    """Set whether a tutorial video is shown."""
+    st.session_state[state_key] = is_visible
+
+
 def main():
     st.markdown(CSS, unsafe_allow_html=True)
     st.session_state.setdefault("nav", "Home")
@@ -2122,14 +2127,40 @@ def main():
     with st.sidebar:
         if user.get("role") == "student":
             video_is_visible = st.session_state.get("show_student_tutorial_video", False)
-            video_button_label = "Hide Tutorial" if video_is_visible else "Show Tutorial"
-            if st.button(video_button_label, key="student_tutorial_video", use_container_width=True):
-                st.session_state["show_student_tutorial_video"] = not video_is_visible
+            if video_is_visible:
+                st.button(
+                    "Hide Tutorial",
+                    key="student_tutorial_video",
+                    on_click=set_tutorial_visibility,
+                    args=("show_student_tutorial_video", False),
+                    use_container_width=True,
+                )
+            else:
+                st.button(
+                    "Show Tutorial",
+                    key="student_tutorial_video",
+                    on_click=set_tutorial_visibility,
+                    args=("show_student_tutorial_video", True),
+                    use_container_width=True,
+                )
         elif user.get("role") == "instructor":
             video_is_visible = st.session_state.get("show_instructor_tutorial_video", False)
-            video_button_label = "Hide Tutorial" if video_is_visible else "Show Tutorial"
-            if st.button(video_button_label, key="instructor_tutorial_video", use_container_width=True):
-                st.session_state["show_instructor_tutorial_video"] = not video_is_visible
+            if video_is_visible:
+                st.button(
+                    "Hide Tutorial",
+                    key="instructor_tutorial_video",
+                    on_click=set_tutorial_visibility,
+                    args=("show_instructor_tutorial_video", False),
+                    use_container_width=True,
+                )
+            else:
+                st.button(
+                    "Show Tutorial",
+                    key="instructor_tutorial_video",
+                    on_click=set_tutorial_visibility,
+                    args=("show_instructor_tutorial_video", True),
+                    use_container_width=True,
+                )
 
         auth.render_account_sidebar(user)  # name, role, replay tutorial, log out
         st.caption("All content is placeholder data. Replace it in Section 3 of this file.")
