@@ -2122,12 +2122,12 @@ def main():
     with st.sidebar:
         if user.get("role") == "student":
             video_is_visible = st.session_state.get("show_student_tutorial_video", False)
-            video_button_label = "Hide Tutorial Video" if video_is_visible else "Tutorial Video"
+            video_button_label = "Hide Tutorial" if video_is_visible else "Show Tutorial"
             if st.button(video_button_label, key="student_tutorial_video", use_container_width=True):
                 st.session_state["show_student_tutorial_video"] = not video_is_visible
         elif user.get("role") == "instructor":
             video_is_visible = st.session_state.get("show_instructor_tutorial_video", False)
-            video_button_label = "Hide Tutorial Video" if video_is_visible else "Tutorial Video"
+            video_button_label = "Hide Tutorial" if video_is_visible else "Show Tutorial"
             if st.button(video_button_label, key="instructor_tutorial_video", use_container_width=True):
                 st.session_state["show_instructor_tutorial_video"] = not video_is_visible
 
@@ -2147,18 +2147,10 @@ def main():
         _, video_col, _ = st.columns([0.5, 3, 0.5])
         with video_col:
             st.video("https://www.youtube.com/watch?v=6etcFarw_mc")
-            _, skip_button, _ = st.columns([1, 1, 1])
-            if skip_button.button("Skip video", key="skip_student_tutorial_video", use_container_width=True):
-                st.session_state["show_student_tutorial_video"] = False
-                st.rerun()
     elif user.get("role") == "instructor" and st.session_state.get("show_instructor_tutorial_video", False):
         _, video_col, _ = st.columns([0.5, 3, 0.5])
         with video_col:
             st.video("https://youtu.be/BX-O7NU8tWE")
-            _, skip_button, _ = st.columns([1, 1, 1])
-            if skip_button.button("Skip video", key="skip_instructor_tutorial_video", use_container_width=True):
-                st.session_state["show_instructor_tutorial_video"] = False
-                st.rerun()
 
     PAGES[st.session_state["nav"]]()
     render_copyright_footer()
