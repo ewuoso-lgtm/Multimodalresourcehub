@@ -1877,7 +1877,7 @@ def page_lessons():
     """, unsafe_allow_html=True)
     _, lesson_projects_col, _ = st.columns([1, 2, 1])
     lesson_projects_col.button(
-        "Planning Lessons & Multimodal Projects",
+        "Watch: Planning Lessons & Multimodal Projects",
         key="lesson_planning_projects",
         type="primary",
         use_container_width=True,
