@@ -1004,14 +1004,14 @@ The Hub seeks to help students and instructors of English communication recogniz
 
 Just as a single coin sets an entire room in motion in *Smooth Criminal,* the Multimodal Studio Hub seeks to provide the inspiration, resources, and momentum that transform an initial idea into a rich and dynamic multimodal creation in a digital space.
             """)
-    # Calls to action under the hero (one primary, one secondary)
-    c1, c2, _ = st.columns([1, 1, 2])
+    # Calls to action under the hero; keep Search resources at the far right.
+    left_action_col, _, search_action_col = st.columns([1, 4, 1])
     if instructor:
-        c1.button("Open lesson plans", key="hero_primary", type="primary", on_click=go_to, args=("Lesson Plans",))
-        c2.button("Search resources", key="hero_secondary", on_click=go_to, args=("Search Resources",))
+        left_action_col.button("Open lesson plans", key="hero_primary", type="primary", on_click=go_to, args=("Lesson Plans",))
+        search_action_col.button("Search resources", key="hero_secondary", on_click=go_to, args=("Search Resources",), use_container_width=True)
     else:
-        c1.button("Search resources", key="hero_primary", type="primary", on_click=go_to, args=("Search Resources",))
-        c2.button("Browse exemplars", key="hero_secondary", on_click=go_to, args=("Browse Exemplars",))
+        left_action_col.button("Browse exemplars", key="hero_secondary", on_click=go_to, args=("Browse Exemplars",))
+        search_action_col.button("Search resources", key="hero_primary", type="primary", on_click=go_to, args=("Search Resources",), use_container_width=True)
 
     # Start-here slideshow: visitors move between one resource card at a time.
     st.header("Start here")
