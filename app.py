@@ -938,9 +938,11 @@ def page_home():
     }
 
     .st-key-toggle_why_multimodal_hub button {
-      min-height: 3rem;
+      min-height: 3.25rem;
+      width: auto;
+      padding: 0.65rem 1.4rem;
       border-radius: 999px !important;
-      font-size: 1.05rem;
+      font-size: 1.25rem;
       font-weight: 700;
       animation: why-hub-button-glow 1.8s ease-in-out infinite;
     }
@@ -954,12 +956,16 @@ def page_home():
     """, unsafe_allow_html=True)
 
     _, why_button_col, _ = st.columns([1, 2, 1])
-    if why_button_col.button(
+    with why_button_col:
+        _, centered_why_button_col, _ = st.columns([1, 2, 1])
+        with centered_why_button_col:
+            why_button_clicked = st.button(
         "Read: Why Multimodal Studio Hub?",
-        key="toggle_why_multimodal_hub",
-        type="primary",
-        use_container_width=True,
-    ):
+                key="toggle_why_multimodal_hub",
+                type="primary",
+                use_container_width=False,
+            )
+    if why_button_clicked:
         st.session_state["show_why_multimodal_hub"] = not st.session_state.get(
             "show_why_multimodal_hub", False
         )
