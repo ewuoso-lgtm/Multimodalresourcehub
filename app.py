@@ -960,7 +960,7 @@ def page_home():
         _, centered_why_button_col, _ = st.columns([1, 2, 1])
         with centered_why_button_col:
             why_button_clicked = st.button(
-        "Read: Why Multimodal Studio Hub?",
+                "Read: Why Multimodal Studio Hub?",
                 key="toggle_why_multimodal_hub",
                 type="primary",
                 use_container_width=False,
