@@ -955,7 +955,7 @@ def page_home():
 
     _, why_button_col, _ = st.columns([1, 2, 1])
     if why_button_col.button(
-        "Why Multimodal Studio Hub?",
+        "Read: Why Multimodal Studio Hub?",
         key="toggle_why_multimodal_hub",
         type="primary",
         use_container_width=True,
