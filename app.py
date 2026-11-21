@@ -2110,7 +2110,7 @@ def show_welcome_splash():
     left, begin_col, learn_col, right = st.columns([1, 1.4, 1.2, 1])
 
     if begin_col.button(
-        "▶ Begin Here",
+        "Returning Users",
         key="welcome_begin",
         type="primary",
         use_container_width=True,
@@ -2119,7 +2119,7 @@ def show_welcome_splash():
         st.rerun()
 
     if learn_col.button(
-        "Learn More",
+        "New User? Sign Up Here",
         key="welcome_learn_more",
         use_container_width=True,
     ):
