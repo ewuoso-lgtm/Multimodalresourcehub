@@ -2000,11 +2000,11 @@ def page_rubrics():
       50% { box-shadow: 0 0 18px 6px rgba(255, 107, 91, .75); }
     }
     .st-key-grading_multimodal_projects button {
-      min-height: 3.25rem;
+      min-height: 4rem;
       width: auto;
-      padding: 0.65rem 1.4rem;
+      padding: 0.8rem 1.6rem;
       border-radius: 999px !important;
-      font-size: 1.25rem;
+      font-size: 2.5rem;
       font-weight: 700;
       animation: grading-projects-glow 1.8s ease-in-out infinite;
     }
