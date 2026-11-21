@@ -1194,9 +1194,11 @@ def page_about():
     }
 
     .st-key-toggle_about_why_multimodal_learning button {
-      min-height: 3rem;
+      min-height: 3.25rem;
+      width: auto;
+      padding: 0.65rem 1.4rem;
       border-radius: 999px !important;
-      font-size: 1.05rem;
+      font-size: 1.25rem;
       font-weight: 700;
       animation: about-why-glow 1.8s ease-in-out infinite;
     }
@@ -1210,12 +1212,16 @@ def page_about():
     """, unsafe_allow_html=True)
 
     _, about_why_button_col, _ = st.columns([1, 2, 1])
-    if about_why_button_col.button(
-        "Read: Why Multimodal Studio Learning?",
-        key="toggle_about_why_multimodal_learning",
-        type="primary",
-        use_container_width=True,
-    ):
+    with about_why_button_col:
+        _, centered_about_why_col, _ = st.columns([1, 2, 1])
+        with centered_about_why_col:
+            about_why_clicked = st.button(
+                "Read: Why Multimodal Studio Learning?",
+                key="toggle_about_why_multimodal_learning",
+                type="primary",
+                use_container_width=False,
+            )
+    if about_why_clicked:
         st.session_state["show_about_why_multimodal_learning"] = not st.session_state.get(
             "show_about_why_multimodal_learning", False
         )
