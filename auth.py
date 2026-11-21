@@ -711,7 +711,12 @@ def render_auth_page():
         """.replace("__LOGO_DATA__", logo_data)
         components.html(sphere_html, height=180, scrolling=False)
 
-    tab_login, tab_signup = st.tabs(["Log in", "Sign up"])
+    selected_auth_tab = st.session_state.pop("auth_tab", "Log in")
+    if selected_auth_tab == "Sign up":
+        tab_signup, tab_login = st.tabs(["Sign up", "Log in"])
+    else:
+        tab_login, tab_signup = st.tabs(["Log in", "Sign up"])
+
     with tab_login:
         render_login_form()
         if st.session_state.get("forgot_password_open", False):
