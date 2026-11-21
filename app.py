@@ -1416,9 +1416,11 @@ def page_search():
       50% { box-shadow: 0 0 18px 6px rgba(255, 107, 91, .75); }
     }
     .st-key-search_resources_projects button {
-      min-height: 3rem;
+      min-height: 3.25rem;
+      width: auto;
+      padding: 0.65rem 1.4rem;
       border-radius: 999px !important;
-      font-size: 1.05rem;
+      font-size: 1.25rem;
       font-weight: 700;
       animation: search-projects-glow 1.8s ease-in-out infinite;
     }
@@ -1448,13 +1450,16 @@ def page_search():
         featured_title_col, featured_button_col = st.columns([1.2, 1.8], vertical_alignment="center")
         with featured_title_col:
             st.header("Featured resources")
-        featured_button_col.button(
-            "Watch: Resources & Multimodal Projects",
-            key="search_resources_projects",
-            type="primary",
-            use_container_width=True,
-            help="A video will be added here.",
-        )
+        with featured_button_col:
+            _, centered_search_button_col, _ = st.columns([1, 2, 1])
+            with centered_search_button_col:
+                st.button(
+                    "Watch: Resources & Multimodal Projects",
+                    key="search_resources_projects",
+                    type="primary",
+                    use_container_width=False,
+                    help="A video will be added here.",
+                )
         st.write(f"Start with these picks, or type a keyword or choose a genre to explore all {len(RESOURCES)} resources.")
         card_grid([r for r in RESOURCES if r.get("featured")], render_resource_card)
 
