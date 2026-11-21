@@ -1864,9 +1864,11 @@ def page_lessons():
       50% { box-shadow: 0 0 18px 6px rgba(255, 107, 91, .75); }
     }
     .st-key-lesson_planning_projects button {
-      min-height: 3rem;
+      min-height: 3.25rem;
+      width: auto;
+      padding: 0.65rem 1.4rem;
       border-radius: 999px !important;
-      font-size: 1.05rem;
+      font-size: 1.25rem;
       font-weight: 700;
       animation: lesson-planning-projects-glow 1.8s ease-in-out infinite;
     }
@@ -1876,13 +1878,16 @@ def page_lessons():
     </style>
     """, unsafe_allow_html=True)
     _, lesson_projects_col, _ = st.columns([1, 2, 1])
-    lesson_projects_col.button(
-        "Watch: Planning Lessons & Multimodal Projects",
-        key="lesson_planning_projects",
-        type="primary",
-        use_container_width=True,
-        help="A video will be added here.",
-    )
+    with lesson_projects_col:
+        _, centered_lesson_button_col, _ = st.columns([1, 2, 1])
+        with centered_lesson_button_col:
+            st.button(
+                "Watch: Planning Lessons & Multimodal Projects",
+                key="lesson_planning_projects",
+                type="primary",
+                use_container_width=False,
+                help="A video will be added here.",
+            )
 
     plans = filter_plans(LESSON_PLANS, genre, level, time_range)
 
