@@ -1116,6 +1116,11 @@ def render_multimodal_tutor_buddy():
         _show_tutor_feedback("tutor_draft_feedback")
 
 
+def _toggle_session_flag(state_key):
+    """Toggle a page visibility flag before Streamlit rerenders its widgets."""
+    st.session_state[state_key] = not st.session_state.get(state_key, False)
+
+
 def render_projects_page(user):
     """The body of the Project Spaces sidebar page."""
     init_db()
@@ -1163,10 +1168,20 @@ def render_projects_page(user):
     guide_is_open = st.session_state.get("show_tutor_buddy_guide", False)
     guide_label = "Hide Tutor Buddy Guide" if guide_is_open else "Using the Multimodal Tutor Buddy"
     _, buddy_col, guide_col, _ = st.columns([1, 2, 2, 1])
-    if buddy_col.button(buddy_label, key="open_multimodal_tutor_buddy", use_container_width=True):
-        st.session_state["show_multimodal_tutor_buddy"] = not buddy_is_open
-    if guide_col.button(guide_label, key="toggle_tutor_buddy_guide_button", use_container_width=True):
-        st.session_state["show_tutor_buddy_guide"] = not guide_is_open
+    buddy_col.button(
+        buddy_label,
+        key="open_multimodal_tutor_buddy",
+        on_click=_toggle_session_flag,
+        args=("show_multimodal_tutor_buddy",),
+        use_container_width=True,
+    )
+    guide_col.button(
+        guide_label,
+        key="toggle_tutor_buddy_guide_button",
+        on_click=_toggle_session_flag,
+        args=("show_tutor_buddy_guide",),
+        use_container_width=True,
+    )
 
     if st.session_state.get("show_tutor_buddy_guide", False):
         with st.container(border=True):
