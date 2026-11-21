@@ -1287,6 +1287,17 @@ def page_about():
         justify-content: center;
         width: 100%;
     }
+    .st-key-about_contact_me [data-testid="stLinkButton"] {
+        display: flex;
+        justify-content: center;
+    }
+    .st-key-about_contact_me a {
+        display: inline-flex;
+        width: max-content;
+        max-width: 100%;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
     .st-key-about_contact_me [data-testid^="stBaseLinkButton"],
     .st-key-join_msh_exchange [data-testid^="stBaseLinkButton"] {
         width: max-content;
