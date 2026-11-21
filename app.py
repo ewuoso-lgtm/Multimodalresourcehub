@@ -2015,13 +2015,15 @@ def page_rubrics():
     """, unsafe_allow_html=True)
     _, grading_projects_col, _ = st.columns([1, 2, 1])
     with grading_projects_col:
-        st.button(
-            "Watch Grading & Multimodal Projects",
-            key="grading_multimodal_projects",
-            type="primary",
-            use_container_width=False,
-            help="A video will be added here.",
-        )
+        _, centered_button_col, _ = st.columns([1, 2, 1])
+        with centered_button_col:
+            st.button(
+                "Watch Grading & Multimodal Projects",
+                key="grading_multimodal_projects",
+                type="primary",
+                use_container_width=False,
+                help="A video will be added here.",
+            )
 
     shown = [r for r in RUBRICS if genre == "All genres" or r["genre"] == genre]
     noun = "rubric" if len(shown) == 1 else "rubrics"
