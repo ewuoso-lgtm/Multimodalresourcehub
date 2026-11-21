@@ -988,45 +988,61 @@ def render_multimodal_tutor_buddy():
     """Collect project context and render the tutor's four feedback stages."""
     st.subheader("Multimodal Tutor Buddy")
     st.write("Get formative feedback as you adapt a project from one mode to another.")
-    st.caption("Your submitted text is sent to Groq to generate feedback. Avoid including names or sensitive personal information.")
+    st.caption("Your text is sent to Groq for feedback. Do not include names or sensitive personal information.")
 
+    st.markdown("**Starting point: current format**")
+    st.caption("What kind of work are you adapting? For example, an essay, report, speech, or research paper.")
     source_mode = st.text_input(
-        "What mode is your original work in?",
+        "Current format",
         value="Essay",
         max_chars=100,
         key="tutor_source_mode",
-        help="For example: essay, report, speech, or research paper.",
+        label_visibility="collapsed",
     )
+
+    st.markdown("**Destination: new format**")
+    st.caption("Choose the format you want to create, such as a video, podcast, infographic, or website.")
     target_mode = st.selectbox(
-        "What mode are you moving it into?",
+        "New format",
         options=list(tutor.MODES),
         format_func=lambda mode: tutor.MODES[mode]["label"],
         key="tutor_target_mode",
+        label_visibility="collapsed",
     )
+
+    st.markdown("**Original work summary**")
+    st.caption("Briefly explain its purpose, audience, main claim, and the key information it supports.")
     source_summary = st.text_area(
-        "Summarize the original work",
+        "Original work summary",
         max_chars=tutor.MAX_LEARNER_CHARS,
         key="tutor_source_summary",
-        help="Include the purpose, audience, main claim, and important supporting material.",
+        label_visibility="collapsed",
     )
+
+    st.markdown("**Core message to carry forward**")
+    st.caption("State the most important idea your audience should understand in the new format.")
     learner_core = st.text_area(
-        "What core message do you want to carry forward?",
+        "Core message to carry forward",
         max_chars=tutor.MAX_LEARNER_CHARS,
         key="tutor_learner_core",
-        help="Describe the purpose, audience, main claim, and what matters most.",
+        label_visibility="collapsed",
     )
 
     with st.expander("Feedback stages", expanded=True):
+        st.markdown("**1. Check your core message**")
         with st.form("tutor_core_feedback_form"):
+            st.markdown("**Optional: your intended takeaway**")
+            st.caption("What do you want readers or viewers to think, feel, or do after encountering your work?")
             author_intent = st.text_area(
-                "What did you intend readers or viewers to take away? (optional)",
+                "Intended takeaway (optional)",
                 max_chars=500,
                 key="tutor_author_intent",
+                label_visibility="collapsed",
             )
-            submit_core = st.form_submit_button("1. Check my core message")
+            submit_core = st.form_submit_button("Check my core message")
         if submit_core:
             if not source_mode.strip() or not source_summary.strip() or not learner_core.strip():
-                st.warning("Enter your source mode, source summary, and core message first.")
+                st.warning("Complete the current format, original work summary, and core message first.")
             else:
                 _run_tutor_feedback(
                     "tutor_core_feedback",
@@ -1038,16 +1054,20 @@ def render_multimodal_tutor_buddy():
                 )
         _show_tutor_feedback("tutor_core_feedback")
 
+        st.markdown("**2. Plan the change to your new format**")
         with st.form("tutor_plan_feedback_form"):
+            st.markdown("**Your adaptation plan**")
+            st.caption("Describe what you will keep, leave out, or add as you adapt the work for the new format.")
             learner_plan = st.text_area(
-                "Describe your plan for the new mode",
+                "Adaptation plan",
                 max_chars=tutor.MAX_LEARNER_CHARS,
                 key="tutor_learner_plan",
+                label_visibility="collapsed",
             )
-            submit_plan = st.form_submit_button("2. Review my transduction plan")
+            submit_plan = st.form_submit_button("Review my adaptation plan")
         if submit_plan:
             if not source_mode.strip() or not source_summary.strip() or not learner_core.strip() or not learner_plan.strip():
-                st.warning("Complete the source details, core message, and plan first.")
+                st.warning("Complete the current format, original work summary, core message, and adaptation plan first.")
             else:
                 _run_tutor_feedback(
                     "tutor_plan_feedback",
@@ -1059,21 +1079,28 @@ def render_multimodal_tutor_buddy():
                 )
         _show_tutor_feedback("tutor_plan_feedback")
 
+        st.markdown("**3. Explain one design choice**")
         with st.form("tutor_rationale_feedback_form"):
+            st.markdown("**Design choice**")
+            st.caption("Name one specific choice, such as narration, color, image, pacing, or layout.")
             design_choice = st.text_input(
-                "What is one design choice you made?",
+                "Design choice",
                 max_chars=500,
                 key="tutor_design_choice",
+                label_visibility="collapsed",
             )
+            st.markdown("**Reason for your choice**")
+            st.caption("Explain how this choice supports your core message, audience, or new format.")
             rationale = st.text_area(
-                "Why does that choice fit your message, audience, or target mode?",
+                "Reason for your choice",
                 max_chars=tutor.MAX_LEARNER_CHARS,
                 key="tutor_design_rationale",
+                label_visibility="collapsed",
             )
-            submit_rationale = st.form_submit_button("3. Review my design rationale")
+            submit_rationale = st.form_submit_button("Review my design choice")
         if submit_rationale:
             if not learner_core.strip() or not design_choice.strip() or not rationale.strip():
-                st.warning("Enter your core message, one design choice, and your rationale first.")
+                st.warning("Enter your core message, one design choice, and the reason for it first.")
             else:
                 _run_tutor_feedback(
                     "tutor_rationale_feedback",
@@ -1085,24 +1112,30 @@ def render_multimodal_tutor_buddy():
                 )
         _show_tutor_feedback("tutor_rationale_feedback")
 
+        st.markdown("**4. Review a draft or project description**")
         with st.form("tutor_draft_feedback_form"):
+            st.markdown("**Draft description or transcript**")
+            st.caption("Describe or transcribe your draft. You may describe a storyboard, layout, image, or audio plan; the Tutor Buddy reviews text and does not inspect image or audio files directly.")
             draft_description = st.text_area(
-                "Describe or transcribe your draft",
+                "Draft description or transcript",
                 max_chars=tutor.MAX_LEARNER_CHARS,
                 key="tutor_draft_description",
-                help="You can describe a storyboard, layout, image, audio plan, or transcript. This tutor reviews text descriptions, not image or audio files directly.",
+                label_visibility="collapsed",
             )
+            st.markdown("**Feedback focus**")
+            st.caption("Choose all lenses for broad feedback, or select one lens to focus the review.")
             lens_options = ["All lenses", *tutor.LENSES.keys()]
             focus_choice = st.selectbox(
                 "Feedback focus",
                 options=lens_options,
                 key="tutor_draft_focus",
                 format_func=lambda focus: focus.replace("_", " ").title(),
+                label_visibility="collapsed",
             )
-            submit_draft = st.form_submit_button("4. Review my draft")
+            submit_draft = st.form_submit_button("Review my draft")
         if submit_draft:
             if not source_mode.strip() or not source_summary.strip() or not learner_core.strip() or not draft_description.strip():
-                st.warning("Complete the source details, core message, and draft description first.")
+                st.warning("Complete the current format, original work summary, core message, and draft description first.")
             else:
                 _run_tutor_feedback(
                     "tutor_draft_feedback",
@@ -1114,7 +1147,6 @@ def render_multimodal_tutor_buddy():
                     None if focus_choice == "All lenses" else focus_choice,
                 )
         _show_tutor_feedback("tutor_draft_feedback")
-
 
 def _toggle_session_flag(state_key):
     """Toggle a page visibility flag before Streamlit rerenders its widgets."""
