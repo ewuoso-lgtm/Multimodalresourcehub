@@ -2000,9 +2000,11 @@ def page_rubrics():
       50% { box-shadow: 0 0 18px 6px rgba(255, 107, 91, .75); }
     }
     .st-key-grading_multimodal_projects button {
-      min-height: 3rem;
+      min-height: 3.25rem;
+      width: auto;
+      padding: 0.65rem 1.4rem;
       border-radius: 999px !important;
-      font-size: 1.05rem;
+      font-size: 1.25rem;
       font-weight: 700;
       animation: grading-projects-glow 1.8s ease-in-out infinite;
     }
@@ -2012,13 +2014,14 @@ def page_rubrics():
     </style>
     """, unsafe_allow_html=True)
     _, grading_projects_col, _ = st.columns([1, 2, 1])
-    grading_projects_col.button(
-        "Watch Grading & Multimodal Projects",
-        key="grading_multimodal_projects",
-        type="primary",
-        use_container_width=True,
-        help="A video will be added here.",
-    )
+    with grading_projects_col:
+        st.button(
+            "Watch Grading & Multimodal Projects",
+            key="grading_multimodal_projects",
+            type="primary",
+            use_container_width=False,
+            help="A video will be added here.",
+        )
 
     shown = [r for r in RUBRICS if genre == "All genres" or r["genre"] == genre]
     noun = "rubric" if len(shown) == 1 else "rubrics"
