@@ -2110,7 +2110,7 @@ def show_welcome_splash():
     left, begin_col, learn_col, right = st.columns([1, 1.4, 1.2, 1])
 
     if begin_col.button(
-        "Returning Users",
+        "Returning User?: Log in Here",
         key="welcome_begin",
         type="primary",
         use_container_width=True,
