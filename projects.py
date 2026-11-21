@@ -1159,7 +1159,7 @@ def render_projects_page(user):
     """, unsafe_allow_html=True)
 
     buddy_is_open = st.session_state.get("show_multimodal_tutor_buddy", False)
-    buddy_label = "Hide Multimodal Tutor Buddy" if buddy_is_open else "Multimodal Tutor Buddy"
+    buddy_label = "Hide Multimodal Tutor Buddy" if buddy_is_open else "Design with the Multimodal Tutor Buddy"
     guide_is_open = st.session_state.get("show_tutor_buddy_guide", False)
     guide_label = "Hide Tutor Buddy Guide" if guide_is_open else "Using the Multimodal Tutor Buddy"
     _, buddy_col, guide_col, _ = st.columns([1, 2, 2, 1])
