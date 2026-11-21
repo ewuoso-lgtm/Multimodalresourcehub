@@ -1393,7 +1393,7 @@ def page_search():
     # Save this search so it appears in "Recent searches"
     remember_search(query)
 
-    # Prominent shortcut to the collaborative Project Space, below the search controls.
+    # Glowing button styling for the featured resources video.
     st.markdown("""
     <style>
     @keyframes search-projects-glow {
@@ -1412,14 +1412,6 @@ def page_search():
     }
     </style>
     """, unsafe_allow_html=True)
-    _, projects_button_col, _ = st.columns([1, 2, 1])
-    projects_button_col.button(
-        "Resources & Multimodal Projects",
-        key="search_resources_projects",
-        type="primary",
-        use_container_width=True,
-        help="A video will be added here.",
-    )
 
     # Suggested keywords
     st.markdown("**Suggested keywords**")
@@ -1438,7 +1430,16 @@ def page_search():
 
     # No keyword and no genre: show featured resources instead of a long list
     if not query.strip() and genre == "All genres":
-        st.header("Featured resources")
+        featured_title_col, featured_button_col = st.columns([1.2, 1.8], vertical_alignment="center")
+        with featured_title_col:
+            st.header("Featured resources")
+        featured_button_col.button(
+            "Watch: Resources & Multimodal Projects",
+            key="search_resources_projects",
+            type="primary",
+            use_container_width=True,
+            help="A video will be added here.",
+        )
         st.write(f"Start with these picks, or type a keyword or choose a genre to explore all {len(RESOURCES)} resources.")
         card_grid([r for r in RESOURCES if r.get("featured")], render_resource_card)
 
