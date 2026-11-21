@@ -1211,7 +1211,7 @@ def page_about():
 
     _, about_why_button_col, _ = st.columns([1, 2, 1])
     if about_why_button_col.button(
-        "Why multimodal learning?",
+        "Read: Why Multimodal Studio Learning?",
         key="toggle_about_why_multimodal_learning",
         type="primary",
         use_container_width=True,
