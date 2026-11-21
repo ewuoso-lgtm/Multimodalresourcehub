@@ -990,8 +990,8 @@ def render_multimodal_tutor_buddy():
     st.write("Get formative feedback as you adapt a project from one mode to another.")
     st.caption("Your text is sent to Groq for feedback. Do not include names or sensitive personal information.")
 
-    st.markdown("**Starting point: current format**")
-    st.caption("What kind of work are you adapting? For example, an essay, report, speech, or research paper.")
+    st.markdown("**What mode is your original work in?**")
+    st.caption("This starts with Essay. Change it if your original work uses another format, such as a report, speech, or research paper.")
     source_mode = st.text_input(
         "Current format",
         value="Essay",
@@ -1000,8 +1000,8 @@ def render_multimodal_tutor_buddy():
         label_visibility="collapsed",
     )
 
-    st.markdown("**Destination: new format**")
-    st.caption("Choose the format you want to create, such as a video, podcast, infographic, or website.")
+    st.markdown("**What mode are you moving it into?**")
+    st.caption("Choose the format you want to create. Options include Comic / graphic narrative, infographic, video essay, and podcast / audio.")
     target_mode = st.selectbox(
         "New format",
         options=list(tutor.MODES),
