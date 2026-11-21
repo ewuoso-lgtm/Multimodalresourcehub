@@ -1277,6 +1277,16 @@ def page_about():
     # Meet the Team. Replace names, bios, and photo paths with your team details.
     st.markdown("""
     <style>
+    @keyframes exchange-button-glow {
+        0%, 100% { box-shadow: 0 0 8px 2px rgba(255, 107, 91, .4); }
+        50% { box-shadow: 0 0 18px 6px rgba(255, 107, 91, .75); }
+    }
+    .st-key-about_contact_me,
+    .st-key-join_msh_exchange {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
     .st-key-about_contact_me [data-testid^="stBaseLinkButton"],
     .st-key-join_msh_exchange [data-testid^="stBaseLinkButton"] {
         width: max-content;
@@ -1285,6 +1295,14 @@ def page_about():
         margin: 0 auto;
         padding: 0.65rem 1.4rem;
         font-size: 1.25rem;
+    }
+    .st-key-join_msh_exchange [data-testid^="stBaseLinkButton"] {
+        animation: exchange-button-glow 1.8s ease-in-out infinite;
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .st-key-join_msh_exchange [data-testid^="stBaseLinkButton"] {
+            animation: none;
+        }
     }
     </style>
     """, unsafe_allow_html=True)
