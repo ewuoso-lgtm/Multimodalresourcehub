@@ -1275,6 +1275,20 @@ def page_about():
                 st.markdown(f'<div class="about-timeline"><h3>{heading}</h3><p>{description}</p></div>', unsafe_allow_html=True)
 
     # Meet the Team. Replace names, bios, and photo paths with your team details.
+    st.markdown("""
+    <style>
+    .st-key-about_contact_me [data-testid^="stBaseLinkButton"],
+    .st-key-join_msh_exchange [data-testid^="stBaseLinkButton"] {
+        width: max-content;
+        max-width: 100%;
+        min-height: 3.25rem;
+        margin: 0 auto;
+        padding: 0.65rem 1.4rem;
+        font-size: 1.25rem;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
     st.header("About the Multimodal Studio Hub Founder")
     team = [
         {"name": "Meet Isaac", "role": "Multimodal Learning",
@@ -1295,10 +1309,12 @@ def page_about():
                 st.caption(member["role"])
                 st.write(member["bio"])
                 if member["name"] == "Meet Isaac":
-                    st.link_button(
+                    _, contact_col, _ = st.columns([1, 2, 1])
+                    contact_col.link_button(
                         "Contact Me",
                         "mailto:ewuoso@iastate.edu?subject=Contact%20Isaac",
-                        use_container_width=True,
+                        key="about_contact_me",
+                        use_container_width=False,
                     )
 
     st.header("Stay In Touch 📨")
@@ -1309,11 +1325,13 @@ def page_about():
         "inspiration, and opportunities to connect with a growing interdisciplinary community "
         "of practice."
     )
-    st.link_button(
+    _, newsletter_button_col, _ = st.columns([1, 2, 1])
+    newsletter_button_col.link_button(
         "Join the Multimodal Studio Hub Exchange",
         "https://docs.google.com/forms/d/e/1FAIpQLSe2L7FkTtUcSJmzJMy9GFdRzc9KYKTWzVLjJDvmwQ-dsLry3A/viewform?usp=publish-editor",
+        key="join_msh_exchange",
         type="primary",
-        use_container_width=True,
+        use_container_width=False,
     )
 
     # Call to Action
