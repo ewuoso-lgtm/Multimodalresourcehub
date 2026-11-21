@@ -2013,7 +2013,7 @@ def page_rubrics():
     """, unsafe_allow_html=True)
     _, grading_projects_col, _ = st.columns([1, 2, 1])
     grading_projects_col.button(
-        "Grading & Multimodal Projects",
+        "Watch Grading & Multimodal Projects",
         key="grading_multimodal_projects",
         type="primary",
         use_container_width=True,
