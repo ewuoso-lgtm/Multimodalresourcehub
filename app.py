@@ -1382,12 +1382,27 @@ def page_search():
     st.session_state.setdefault("search_genre", "All genres")
     st.session_state.setdefault("search_history", [])
 
-    # Search box, genre filter, and Clear button (all with visible labels and help text)
+    # Search box, genre filter, and Clear button
     with panel("search"):
         c1, c2 = st.columns([3, 1])
-        query = c1.text_input("Search resources", placeholder="Try: podcast, alt text, storyboard",
-                              help="Type one or more words. A resource must match every word.", key="search_query")
-        genre = c2.selectbox("Genre", ["All genres"] + GENRES, help="Show only one type of project.", key="search_genre")
+        with c1:
+            st.markdown("**Search resources**")
+            st.caption("Type one or more words. A resource must match every word.")
+            query = st.text_input(
+                "Search resources",
+                placeholder="Try: podcast, alt text, storyboard",
+                key="search_query",
+                label_visibility="collapsed",
+            )
+        with c2:
+            st.markdown("**Genre**")
+            st.caption("Show only one type of project.")
+            genre = st.selectbox(
+                "Genre",
+                ["All genres"] + GENRES,
+                key="search_genre",
+                label_visibility="collapsed",
+            )
         st.button("Clear search", key="clear_search", on_click=clear_search, help="Empty the search box and show all genres")
 
     # Save this search so it appears in "Recent searches"
