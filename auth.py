@@ -801,10 +801,11 @@ def require_login():
 
 
 def render_account_sidebar(user):
-    """Show the signed-in user, tutorial replay, and logout controls in the sidebar."""
+    """Show the signed-in user's profile and account controls in the sidebar."""
     with st.sidebar:
-        st.divider()
-        st.markdown(f"**{md_escape(user['display_name'])}**")
-        st.caption(role_label(user))
-        st.button("Replay tutorial", key="acct_replay", on_click=replay_tutorial)
-        st.button("Log out", key="acct_logout", on_click=logout)
+        st.markdown('<div class="sidebar-section-heading">Your account</div>', unsafe_allow_html=True)
+        with st.container(key="account_profile_card"):
+            st.markdown(f"**{md_escape(user['display_name'])}**")
+            st.caption(role_label(user))
+            st.button("Replay tutorial", key="acct_replay", on_click=replay_tutorial, use_container_width=True)
+            st.button("Log out", key="acct_logout", on_click=logout, use_container_width=True)
