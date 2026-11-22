@@ -305,8 +305,19 @@ h1, h2, h3, h4, h5 { font-family: 'Fraunces', Georgia, serif !important; color: 
     color: var(--plum);
     margin: 12px 0 6px;
 }
+@keyframes browse-hub-coral-glow {
+    0%, 100% { text-shadow: 0 0 0 rgba(255, 107, 91, 0); }
+    50% { text-shadow: 0 0 7px rgba(255, 107, 91, .65); }
+}
 [data-testid="stSidebar"] .browse-hub-heading {
     font-size: 1.26rem;
+    animation: browse-hub-coral-glow 1.8s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+    [data-testid="stSidebar"] .browse-hub-heading {
+        animation: none;
+        text-shadow: 0 0 4px rgba(255, 107, 91, .4);
+    }
 }
 [data-testid="stSidebar"] .st-key-nav [role="radiogroup"] {
     display: flex;
