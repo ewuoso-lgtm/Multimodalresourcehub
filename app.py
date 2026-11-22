@@ -305,6 +305,9 @@ h1, h2, h3, h4, h5 { font-family: 'Fraunces', Georgia, serif !important; color: 
     color: var(--plum);
     margin: 12px 0 6px;
 }
+[data-testid="stSidebar"] .browse-hub-heading {
+    font-size: 1.26rem;
+}
 [data-testid="stSidebar"] .st-key-nav [role="radiogroup"] {
     display: flex;
     flex-direction: column;
@@ -2281,7 +2284,7 @@ def main():
     projects.redeem_pending_share(user)
 
     with st.sidebar:
-        st.markdown('<div class="sidebar-section-heading">Browse the Hub</div>', unsafe_allow_html=True)
+        st.markdown('<div class="sidebar-section-heading browse-hub-heading">Browse the Hub</div>', unsafe_allow_html=True)
         page_icons = {
             "Home": "🏠",
             "Search Resources": "🔎",
