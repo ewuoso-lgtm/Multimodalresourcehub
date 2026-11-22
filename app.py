@@ -54,6 +54,10 @@ MODALITY_COLORS = {
 
 CSS = """
 <style>
+@keyframes msh-tutor-buddy-glow {
+  0%, 100% { box-shadow: 0 0 8px 2px rgba(255, 107, 91, .45); }
+  50% { box-shadow: 0 0 18px 6px rgba(255, 107, 91, .75); }
+}
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
 /* Design tokens: brand palette, 4px-based spacing scale, corner radius */
@@ -944,7 +948,7 @@ def page_home():
       border-radius: 999px !important;
       font-size: 1.25rem;
       font-weight: 700;
-      animation: why-hub-button-glow 1.8s ease-in-out infinite;
+      animation: msh-tutor-buddy-glow 1.8s ease-in-out infinite;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -1483,7 +1487,7 @@ def page_search():
       border-radius: 999px !important;
       font-size: 1.25rem;
       font-weight: 700;
-      animation: search-projects-glow 1.8s ease-in-out infinite;
+      animation: msh-tutor-buddy-glow 1.8s ease-in-out infinite;
     }
     @media (prefers-reduced-motion: reduce) {
       .st-key-search_resources_projects button { animation: none; }
@@ -1579,7 +1583,7 @@ def page_exemplars():
       border-radius: 999px !important;
       font-size: 1.25rem;
       font-weight: 700;
-      animation: exemplars-projects-glow 1.8s ease-in-out infinite;
+      animation: msh-tutor-buddy-glow 1.8s ease-in-out infinite;
     }
     @media (prefers-reduced-motion: reduce) {
       .st-key-exemplars_multimodal_projects button { animation: none; }
@@ -1870,7 +1874,7 @@ def page_lessons():
       border-radius: 999px !important;
       font-size: 1.25rem;
       font-weight: 700;
-      animation: lesson-planning-projects-glow 1.8s ease-in-out infinite;
+      animation: msh-tutor-buddy-glow 1.8s ease-in-out infinite;
     }
     @media (prefers-reduced-motion: reduce) {
       .st-key-lesson_planning_projects button { animation: none; }
@@ -2082,7 +2086,7 @@ def page_rubrics():
       border-radius: 999px !important;
       font-size: 2.5rem;
       font-weight: 700;
-      animation: grading-projects-glow 1.8s ease-in-out infinite;
+      animation: msh-tutor-buddy-glow 1.8s ease-in-out infinite;
     }
     @media (prefers-reduced-motion: reduce) {
       .st-key-grading_multimodal_projects button { animation: none; }
