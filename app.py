@@ -284,28 +284,57 @@ h1, h2, h3, h4, h5 { font-family: 'Fraunces', Georgia, serif !important; color: 
 .stApp button, .stApp a, .stApp [role="button"], .stApp input[type="checkbox"],
 .stApp input[type="radio"], .stApp select, .stApp summary { cursor: pointer !important; }
 
-/* Clickable, progress-style top navigation */
-.st-key-nav [role="radiogroup"] {
+/* Sidebar brand card and vertical page navigation */
+[data-testid="stSidebar"] .st-key-sidebar_brand {
+    background: #EBE5F8;
+    border: 1px solid #D8CDEE;
+    border-left: 4px solid var(--coral);
+    border-radius: 14px;
+    padding: 12px;
+    margin: 4px 0 20px;
+    box-shadow: 0 4px 12px rgba(45,30,79,.08);
+}
+[data-testid="stSidebar"] .st-key-sidebar_brand img {
+    border-radius: 10px;
+    border: 1px solid rgba(45,30,79,.14);
+}
+[data-testid="stSidebar"] .sidebar-section-heading {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--plum);
+    margin: 12px 0 6px;
+}
+[data-testid="stSidebar"] .st-key-nav [role="radiogroup"] {
     display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-    border-bottom: 2px solid var(--line);
+    flex-direction: column;
+    gap: 3px;
+    border: 0;
 }
-.st-key-nav [role="radiogroup"] label {
-    padding: 10px 14px;
-    border-radius: 8px 8px 0 0;
-    border-bottom: 4px solid transparent;
+[data-testid="stSidebar"] .st-key-nav [role="radiogroup"] label {
+    border: 0;
+    border-left: 4px solid transparent;
+    border-radius: 9px;
+    padding: 8px 10px;
 }
-.st-key-nav [role="radiogroup"] label p {
+[data-testid="stSidebar"] .st-key-nav [role="radiogroup"] label p {
+    font-weight: 650 !important;
+}
+[data-testid="stSidebar"] .st-key-nav [role="radiogroup"] label:has(input:checked) {
+    background: var(--plum) !important;
+    border-left-color: var(--coral) !important;
+}
+[data-testid="stSidebar"] .st-key-nav [role="radiogroup"] label:has(input:checked) p {
+    color: #FFFFFF !important;
     font-weight: 700 !important;
 }
-.st-key-nav [role="radiogroup"] label:has(input:checked) {
-    background: var(--lavender) !important;
-    border-bottom-color: var(--coral) !important;
-}
-.st-key-nav [role="radiogroup"] label:has(input:checked) p {
-    color: var(--plum) !important;
-    font-weight: 700 !important;
+[data-testid="stSidebar"] .st-key-account_profile_card {
+    background: #FFFFFF;
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--teal);
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 4px 12px rgba(45,30,79,.06);
 }
 
 /* Visible keyboard focus */
@@ -2225,20 +2254,21 @@ def main():
         show_welcome_splash()
         st.stop()
 
-    # Logo block: shown on every screen, including sign in and the tutorial
+    # Branded sidebar header: shown on every screen, including sign-in and tutorials
     with st.sidebar:
-        logo_col, brand_col = st.columns([1, 3])
-        with logo_col:
-            st.image(
-                str(Path(__file__).resolve().parent / "assets" / "msh-logo.jpg"),
-                width=56,
-            )
-        with brand_col:
-            st.markdown(
-                '<div class="brand">Multimodal Studio Hub</div>'
-                '<div class="tagline">Teaching resources for multimodal projects</div>',
-                unsafe_allow_html=True,
-            )
+        with st.container(key="sidebar_brand"):
+            logo_col, brand_col = st.columns([1, 3])
+            with logo_col:
+                st.image(
+                    str(Path(__file__).resolve().parent / "assets" / "msh-logo.jpg"),
+                    width=52,
+                )
+            with brand_col:
+                st.markdown(
+                    '<div class="brand">Multimodal Studio Hub</div>'
+                    '<div class="tagline">Teaching resources for multimodal projects</div>',
+                    unsafe_allow_html=True,
+                )
 
     # Accounts: signed-out visitors see sign up / log in, new users see the tutorial, and the script
     # stops inside this call until they are done. Everything below runs only for signed-in users.
@@ -2246,54 +2276,48 @@ def main():
     projects.redeem_pending_share(user)
 
     with st.sidebar:
+        st.markdown('<div class="sidebar-section-heading">Browse the Hub</div>', unsafe_allow_html=True)
+        page_icons = {
+            "Home": "🏠",
+            "Search Resources": "🔎",
+            "Browse Exemplars": "🖼️",
+            "Project Space": "🧩",
+            "Lesson Plans": "📝",
+            "Rubrics": "📊",
+            "About": "ℹ️",
+        }
+        st.radio(
+            "Browse the Hub",
+            list(PAGES),
+            key="nav",
+            format_func=lambda page: f"{page_icons[page]}  {page}",
+            label_visibility="collapsed",
+        )
+
+        st.divider()
+        st.markdown('<div class="sidebar-section-heading">Tutorial</div>', unsafe_allow_html=True)
+        st.caption("New here? Watch the tutorial.")
         if user.get("role") == "student":
             video_is_visible = st.session_state.get("show_student_tutorial_video", False)
-            if video_is_visible:
-                st.button(
-                    "Hide Tutorial",
-                    key="student_tutorial_video",
-                    on_click=set_tutorial_visibility,
-                    args=("show_student_tutorial_video", False),
-                    use_container_width=True,
-                )
-            else:
-                st.button(
-                    "Show Tutorial",
-                    key="student_tutorial_video",
-                    on_click=set_tutorial_visibility,
-                    args=("show_student_tutorial_video", True),
-                    use_container_width=True,
-                )
+            st.button(
+                "Hide Tutorial" if video_is_visible else "Show Tutorial",
+                key="student_tutorial_video",
+                on_click=set_tutorial_visibility,
+                args=("show_student_tutorial_video", not video_is_visible),
+                use_container_width=True,
+            )
         elif user.get("role") == "instructor":
             video_is_visible = st.session_state.get("show_instructor_tutorial_video", False)
-            if video_is_visible:
-                st.button(
-                    "Hide Tutorial",
-                    key="instructor_tutorial_video",
-                    on_click=set_tutorial_visibility,
-                    args=("show_instructor_tutorial_video", False),
-                    use_container_width=True,
-                )
-            else:
-                st.button(
-                    "Show Tutorial",
-                    key="instructor_tutorial_video",
-                    on_click=set_tutorial_visibility,
-                    args=("show_instructor_tutorial_video", True),
-                    use_container_width=True,
-                )
+            st.button(
+                "Hide Tutorial" if video_is_visible else "Show Tutorial",
+                key="instructor_tutorial_video",
+                on_click=set_tutorial_visibility,
+                args=("show_instructor_tutorial_video", not video_is_visible),
+                use_container_width=True,
+            )
 
-        auth.render_account_sidebar(user)  # name, role, replay tutorial, log out
-
-
-    # Top page navigation
-    st.radio(
-        "Navigate",
-        list(PAGES),
-        key="nav",
-        horizontal=True,
-        label_visibility="collapsed",
-    )
+        st.divider()
+        auth.render_account_sidebar(user)  # profile, role, replay tutorial, and log out
 
     if user.get("role") == "student" and st.session_state.get("show_student_tutorial_video", False):
         _, video_col, _ = st.columns([0.5, 3, 0.5])
