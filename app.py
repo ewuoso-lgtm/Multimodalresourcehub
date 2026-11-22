@@ -320,9 +320,9 @@ h1, h2, h3, h4, h5 { font-family: 'Fraunces', Georgia, serif !important; color: 
     }
 }
 /* Horizontal fallback navigation above page content */
-.st-key-top_nav_panel [data-testid="stExpander"] summary {
+.st-key-top_nav_panel [data-testid="stExpander"] summary,
+.st-key-top_nav_panel [data-testid="stExpander"] summary [data-testid="stMarkdownContainer"] p {
     font-family: 'Fraunces', Georgia, serif;
-    font-size: 1.495rem;
     font-weight: 800 !important;
     color: var(--plum);
 }
