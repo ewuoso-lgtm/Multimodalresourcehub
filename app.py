@@ -930,7 +930,7 @@ def page_home():
     <style>
     @keyframes why-hub-button-glow {
       0%, 100% {
-        box-shadow: 0 0 8px 2px rgba(255, 107, 91, .4);
+        box-shadow: 0 0 8px 2px rgba(255, 107, 91, .45);
       }
       50% {
         box-shadow: 0 0 18px 6px rgba(255, 107, 91, .75);
@@ -1473,7 +1473,7 @@ def page_search():
     st.markdown("""
     <style>
     @keyframes search-projects-glow {
-      0%, 100% { box-shadow: 0 0 8px 2px rgba(255, 107, 91, .4); }
+      0%, 100% { box-shadow: 0 0 8px 2px rgba(255, 107, 91, .45); }
       50% { box-shadow: 0 0 18px 6px rgba(255, 107, 91, .75); }
     }
     .st-key-search_resources_projects button {
@@ -1569,7 +1569,7 @@ def page_exemplars():
     st.markdown("""
     <style>
     @keyframes exemplars-projects-glow {
-      0%, 100% { box-shadow: 0 0 8px 2px rgba(255, 107, 91, .4); }
+      0%, 100% { box-shadow: 0 0 8px 2px rgba(255, 107, 91, .45); }
       50% { box-shadow: 0 0 18px 6px rgba(255, 107, 91, .75); }
     }
     .st-key-exemplars_multimodal_projects button {
@@ -1860,7 +1860,7 @@ def page_lessons():
     st.markdown("""
     <style>
     @keyframes lesson-planning-projects-glow {
-      0%, 100% { box-shadow: 0 0 8px 2px rgba(255, 107, 91, .4); }
+      0%, 100% { box-shadow: 0 0 8px 2px rgba(255, 107, 91, .45); }
       50% { box-shadow: 0 0 18px 6px rgba(255, 107, 91, .75); }
     }
     .st-key-lesson_planning_projects button {
@@ -2072,7 +2072,7 @@ def page_rubrics():
     st.markdown("""
     <style>
     @keyframes grading-projects-glow {
-      0%, 100% { box-shadow: 0 0 8px 2px rgba(255, 107, 91, .4); }
+      0%, 100% { box-shadow: 0 0 8px 2px rgba(255, 107, 91, .45); }
       50% { box-shadow: 0 0 18px 6px rgba(255, 107, 91, .75); }
     }
     .st-key-grading_multimodal_projects button {
