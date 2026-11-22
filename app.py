@@ -1867,6 +1867,20 @@ def page_lessons():
       0%, 100% { box-shadow: 0 0 8px 2px rgba(255, 107, 91, .45); }
       50% { box-shadow: 0 0 18px 6px rgba(255, 107, 91, .75); }
     }
+    .st-key-lesson_planning_projects,
+    .st-key-lesson_activities_projects {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+    .st-key-lesson_activities_projects button {
+      min-height: 3.25rem;
+      width: auto;
+      padding: 0.65rem 1.4rem;
+      border-radius: 999px !important;
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
     .st-key-lesson_planning_projects button {
       min-height: 3.25rem;
       width: auto;
@@ -1888,14 +1902,14 @@ def page_lessons():
             "Watch: Planning Lessons & Multimodal Projects",
             key="lesson_planning_projects",
             type="secondary",
-            use_container_width=True,
+            use_container_width=False,
             help="A video will be added here.",
         )
         activities_button_col.button(
             "Watch: Lesson Activities & Multimodal Projects",
             key="lesson_activities_projects",
             type="secondary",
-            use_container_width=True,
+            use_container_width=False,
             help="A video will be added here.",
         )
 
