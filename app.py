@@ -966,7 +966,7 @@ def page_home():
             why_button_clicked = st.button(
                 "Read: Why Multimodal Studio Hub?",
                 key="toggle_why_multimodal_hub",
-                type="primary",
+                type="secondary",
                 use_container_width=False,
             )
     if why_button_clicked:
@@ -1521,7 +1521,7 @@ def page_search():
                 st.button(
                     "Watch: Resources & Multimodal Projects",
                     key="search_resources_projects",
-                    type="primary",
+                    type="secondary",
                     use_container_width=False,
                     help="A video will be added here.",
                 )
@@ -1597,7 +1597,7 @@ def page_exemplars():
             st.button(
                 "Watch: Exemplars & Multimodal Projects",
                 key="exemplars_multimodal_projects",
-                type="primary",
+                type="secondary",
                 use_container_width=False,
                 help="A video will be added here.",
             )
@@ -1888,7 +1888,7 @@ def page_lessons():
             st.button(
                 "Watch: Planning Lessons & Multimodal Projects",
                 key="lesson_planning_projects",
-                type="primary",
+                type="secondary",
                 use_container_width=False,
                 help="A video will be added here.",
             )
@@ -2100,7 +2100,7 @@ def page_rubrics():
             st.button(
                 "Watch Grading & Multimodal Projects",
                 key="grading_multimodal_projects",
-                type="primary",
+                type="secondary",
                 use_container_width=False,
                 help="A video will be added here.",
             )
