@@ -16,7 +16,7 @@ browse exemplars, plan lessons, and use rubrics for multimodal projects.
 - Lesson plans with objectives, timelines, and materials
 - Rubrics for common multimodal projects
 - Project space for refining multimodal projects ideas
-- Multimoodal Tutor Buddy to assist in refining multimodal project ideas
+- Multimoodal Tutor Buddy to assist students in refining multimodal project ideas
 
 ## Implementation
 - Python & Streamlit: Web interface and application logic.
@@ -31,4 +31,4 @@ browse exemplars, plan lessons, and use rubrics for multimodal projects.
 - `docs/`: architecture outline and interface layout
 
 ## Status
-Presence of placeholder content. Real resources are currently being added.
+Presence of a few placeholder contents. Real resources are currently being added.
