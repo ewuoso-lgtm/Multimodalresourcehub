@@ -320,11 +320,15 @@ h1, h2, h3, h4, h5 { font-family: 'Fraunces', Georgia, serif !important; color: 
     }
 }
 /* Horizontal fallback navigation above page content */
-.st-key-top_nav_panel [data-testid="stExpander"] summary {
-    font-family: 'Fraunces', Georgia, serif;
-    font-size: 1.495rem;
+.st-key-top_nav_panel [data-testid="stExpander"] summary,
+.st-key-top_nav_panel [data-testid="stExpander"] summary p,
+.st-key-top_nav_panel [data-testid="stExpander"] summary span,
+.st-key-top_nav_panel [data-testid="stExpander"] summary [data-testid="stMarkdownContainer"] {
+    font-family: 'Fraunces', Georgia, serif !important;
+    font-size: 1.495rem !important;
     font-weight: 800 !important;
-    color: var(--plum);
+    color: var(--plum) !important;
+    line-height: 1.2 !important;
 }
 .st-key-top_nav [role="radiogroup"] {
     display: flex;
