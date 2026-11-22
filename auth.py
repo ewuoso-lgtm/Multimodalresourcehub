@@ -466,7 +466,7 @@ def render_signup_form():
             key="su_role",
             label_visibility="visible",
         )
-        submitted = st.form_submit_button("Create account", type="primary")
+        submitted = st.form_submit_button("Create account", type="primary", key="su_submit")
     if not submitted:
         return
 
@@ -516,7 +516,7 @@ def render_login_form():
 
         login_col, forgot_col = st.columns(2)
         with login_col:
-            submitted = st.form_submit_button("Log in", type="primary", use_container_width=True)
+            submitted = st.form_submit_button("Log in", type="primary", use_container_width=True, key="li_submit")
         with forgot_col:
             forgot_clicked = st.form_submit_button("🔑 Forgot Password?", use_container_width=True)
 
@@ -715,7 +715,26 @@ def render_auth_page():
     if selected_auth_tab == "Sign up":
         tab_signup, tab_login = st.tabs(["Sign up", "Log in"])
     else:
-        tab_login, tab_signup = st.tabs(["Log in", "Sign up"])
+        st.markdown("""
+    <style>
+    @keyframes auth-action-glow {
+        0%, 100% { box-shadow: 0 0 8px 2px rgba(255, 107, 91, .45); }
+        50% { box-shadow: 0 0 18px 6px rgba(255, 107, 91, .75); }
+    }
+    .st-key-li_submit button,
+    .st-key-su_submit button {
+        animation: auth-action-glow 1.8s ease-in-out infinite;
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .st-key-li_submit button,
+        .st-key-su_submit button {
+            animation: none;
+        }
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+    tab_login, tab_signup = st.tabs(["Log in", "Sign up"])
 
     with tab_login:
         render_login_form()
