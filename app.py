@@ -2389,6 +2389,14 @@ def main():
                 use_container_width=True,
             )
 
+        if user.get("role") in {"student", "instructor"}:
+            st.button(
+                "Watch: How to Use the Multimodal Tutor Buddy",
+                key="tutor_buddy_tutorial_video",
+                use_container_width=True,
+                help="A video will be added here.",
+            )
+
         st.divider()
         auth.render_account_sidebar(user)  # profile, role, replay tutorial, and log out
 
