@@ -318,7 +318,12 @@ h1, h2, h3, h4, h5 { font-family: 'Fraunces', Georgia, serif !important; color: 
     padding: 8px 10px;
 }
 [data-testid="stSidebar"] .st-key-nav [role="radiogroup"] label p {
+    font-size: 2rem !important;
+    line-height: 1.15;
     font-weight: 650 !important;
+}
+[data-testid="stSidebar"] .st-key-nav [role="radiogroup"] label {
+    padding: 12px 10px;
 }
 [data-testid="stSidebar"] .st-key-nav [role="radiogroup"] label:has(input:checked) {
     background: var(--plum) !important;
