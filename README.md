@@ -1,6 +1,6 @@
-# Isaac Ewuoso_ Multimodalresourcehub
+# Isaac Ewuoso_ Multimodalstudiohub
 
-The Multimodal Hub Studio is a website and resource hub, featuring a wealth of resources and information for college instructors who wish to design and implement multimodal projects in English communication courses and for students to view model exemplar projects. The website is a "making space"  not a static resource list where users can browse real student work, get teaching materials, and build an assignment step-by-step, learn more about multimodal projects design, and event assessment of these projects.
+The Multimodal Hub Studio is a website and resource hub, featuring a wealth of resources and information for college instructors who wish to design and implement multimodal projects in English communication courses and for students who wish to view model exemplar projects. The website is a "making space"  not a static resource list where users can browse real student work, get teaching materials, and examine multimodal assignment step-by-step, learn more about multimodal projects design, including summative and formative assessment of these projects.
 
 
 # Multimodal Studio Hub
@@ -10,13 +10,17 @@ browse exemplars, plan lessons, and use rubrics for multimodal projects.
 
 **Live app:** https://multimodalsh.streamlit.app
 
-## Features
+## Features of the current website prototype:
 - Search resources by keyword and genre
 - Browse student exemplars with instructor commentary
 - Lesson plans with objectives, timelines, and materials
 - Rubrics for common multimodal projects
 - Project space for refining multimodal projects ideas
 - Multimoodal Tutor Buddy to assist in refining multimodal project ideas
+
+## Implementation
+- Python & Streamlit: Web interface and application logic.
+- Groq API (openai/gpt-oss-20b): LLM-generated feedback for the Multimodal Tutor Buddy.
 
 ## Run locally
     pip install -r requirements.txt
@@ -27,4 +31,4 @@ browse exemplars, plan lessons, and use rubrics for multimodal projects.
 - `docs/`: architecture outline and interface layout
 
 ## Status
-Sample placeholder content. Real resources are being added.
+Presence of placeholder content. Real resources are currently being added.
