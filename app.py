@@ -319,6 +319,42 @@ h1, h2, h3, h4, h5 { font-family: 'Fraunces', Georgia, serif !important; color: 
         text-shadow: 0 0 4px rgba(255, 107, 91, .4);
     }
 }
+/* Horizontal fallback navigation above page content */
+.st-key-top_nav [role="radiogroup"] {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+}
+.st-key-top_nav [role="radiogroup"] label {
+    width: auto;
+    min-height: 2.7rem;
+    padding: 7px 12px;
+    border: 1px solid #D8CDEE;
+    border-radius: 999px;
+    background: #FFFFFF;
+    cursor: pointer;
+}
+.st-key-top_nav [role="radiogroup"] label p {
+    color: var(--plum);
+    font-size: .95rem !important;
+    line-height: 1.2;
+    font-weight: 650 !important;
+    white-space: nowrap;
+}
+.st-key-top_nav [role="radiogroup"] label:has(input:checked) {
+    background: var(--plum);
+    border-color: var(--plum);
+}
+.st-key-top_nav [role="radiogroup"] label:has(input:checked) p {
+    color: #FFFFFF !important;
+}
+@media (max-width: 640px) {
+    .st-key-top_nav [role="radiogroup"] { gap: 4px; }
+    .st-key-top_nav [role="radiogroup"] label { padding: 6px 9px; }
+    .st-key-top_nav [role="radiogroup"] label p { font-size: .85rem !important; }
+}
+
 [data-testid="stSidebar"] .st-key-nav [role="radiogroup"] {
     display: flex;
     flex-direction: column;
@@ -2262,9 +2298,20 @@ def set_tutorial_visibility(state_key, is_visible):
     st.session_state[state_key] = is_visible
 
 
+def sync_sidebar_navigation():
+    """Keep the top navigation in sync when the sidebar page changes."""
+    st.session_state["top_nav"] = st.session_state["nav"]
+
+
+def sync_top_navigation():
+    """Keep the sidebar navigation in sync when the top page selector changes."""
+    st.session_state["nav"] = st.session_state["top_nav"]
+
+
 def main():
     st.markdown(CSS, unsafe_allow_html=True)
     st.session_state.setdefault("nav", "Home")
+    st.session_state.setdefault("top_nav", st.session_state["nav"])
 
     # A read-only project share link may be viewed without signing in.
     projects.handle_shared_link()
@@ -2311,6 +2358,7 @@ def main():
             key="nav",
             format_func=lambda page: f"{page_icons[page]}  {page}",
             label_visibility="collapsed",
+            on_change=sync_sidebar_navigation,
         )
 
         st.divider()
@@ -2346,6 +2394,18 @@ def main():
         _, video_col, _ = st.columns([0.5, 3, 0.5])
         with video_col:
             st.video("https://youtu.be/BX-O7NU8tWE")
+
+    # This horizontal selector stays available when the sidebar is collapsed.
+    st.markdown('<div class="sidebar-section-heading">Browse the Hub</div>', unsafe_allow_html=True)
+    st.radio(
+        "Browse the Hub",
+        list(PAGES),
+        key="top_nav",
+        horizontal=True,
+        format_func=lambda page: f"{page_icons[page]} {page}",
+        label_visibility="collapsed",
+        on_change=sync_top_navigation,
+    )
 
     PAGES[st.session_state["nav"]]()
     render_copyright_footer()
