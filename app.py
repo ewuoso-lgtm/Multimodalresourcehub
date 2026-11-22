@@ -320,12 +320,11 @@ h1, h2, h3, h4, h5 { font-family: 'Fraunces', Georgia, serif !important; color: 
     }
 }
 /* Horizontal fallback navigation above page content */
-.top-nav-heading {
+.st-key-top_nav_panel [data-testid="stExpander"] summary {
     font-family: 'Fraunces', Georgia, serif;
     font-size: 1.15rem;
     font-weight: 800 !important;
     color: var(--plum);
-    margin: 12px 0 8px;
 }
 .st-key-top_nav [role="radiogroup"] {
     display: flex;
@@ -2402,17 +2401,18 @@ def main():
         with video_col:
             st.video("https://youtu.be/BX-O7NU8tWE")
 
-    # This horizontal selector stays available when the sidebar is collapsed.
-    st.markdown('<div class="top-nav-heading">Browse the Hub</div>', unsafe_allow_html=True)
-    st.radio(
-        "Browse the Hub",
-        list(PAGES),
-        key="top_nav",
-        horizontal=True,
-        format_func=lambda page: f"{page_icons[page]} {page}",
-        label_visibility="collapsed",
-        on_change=sync_top_navigation,
-    )
+    # This collapsible horizontal selector stays available when the sidebar is collapsed.
+    with st.container(key="top_nav_panel"):
+        with st.expander("Browse the Hub", expanded=True):
+            st.radio(
+                "Browse the Hub",
+                list(PAGES),
+                key="top_nav",
+                horizontal=True,
+                format_func=lambda page: f"{page_icons[page]} {page}",
+                label_visibility="collapsed",
+                on_change=sync_top_navigation,
+            )
 
     PAGES[st.session_state["nav"]]()
     render_copyright_footer()
