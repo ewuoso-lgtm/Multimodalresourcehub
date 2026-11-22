@@ -1204,7 +1204,7 @@ def page_about():
       border-radius: 999px !important;
       font-size: 1.25rem;
       font-weight: 700;
-      animation: about-why-glow 1.8s ease-in-out infinite;
+      animation: msh-tutor-buddy-glow 1.8s ease-in-out infinite;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -1222,7 +1222,7 @@ def page_about():
             about_why_clicked = st.button(
                 "Read: Why Multimodal Studio Learning?",
                 key="toggle_about_why_multimodal_learning",
-                type="primary",
+                type="secondary",
                 use_container_width=False,
             )
     if about_why_clicked:
