@@ -1881,17 +1881,23 @@ def page_lessons():
     }
     </style>
     """, unsafe_allow_html=True)
-    _, lesson_projects_col, _ = st.columns([1, 2, 1])
+    _, lesson_projects_col, _ = st.columns([1, 6, 1])
     with lesson_projects_col:
-        _, centered_lesson_button_col, _ = st.columns([1, 2, 1])
-        with centered_lesson_button_col:
-            st.button(
-                "Watch: Planning Lessons & Multimodal Projects",
-                key="lesson_planning_projects",
-                type="secondary",
-                use_container_width=False,
-                help="A video will be added here.",
-            )
+        planning_button_col, activities_button_col = st.columns(2, vertical_alignment="center")
+        planning_button_col.button(
+            "Watch: Planning Lessons & Multimodal Projects",
+            key="lesson_planning_projects",
+            type="secondary",
+            use_container_width=True,
+            help="A video will be added here.",
+        )
+        activities_button_col.button(
+            "Watch: Lesson Activities & Multimodal Projects",
+            key="lesson_activities_projects",
+            type="secondary",
+            use_container_width=True,
+            help="A video will be added here.",
+        )
 
     plans = filter_plans(LESSON_PLANS, genre, level, time_range)
 
