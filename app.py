@@ -2284,7 +2284,7 @@ def main():
                 )
 
         auth.render_account_sidebar(user)  # name, role, replay tutorial, log out
-        st.caption("All content is placeholder data. Replace it in Section 3 of this file.")
+
 
     # Top page navigation
     st.radio(
