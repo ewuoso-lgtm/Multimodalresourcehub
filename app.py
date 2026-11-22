@@ -320,6 +320,13 @@ h1, h2, h3, h4, h5 { font-family: 'Fraunces', Georgia, serif !important; color: 
     }
 }
 /* Horizontal fallback navigation above page content */
+.top-nav-heading {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 800 !important;
+    color: var(--plum);
+    margin: 12px 0 8px;
+}
 .st-key-top_nav [role="radiogroup"] {
     display: flex;
     flex-wrap: wrap;
@@ -2396,7 +2403,7 @@ def main():
             st.video("https://youtu.be/BX-O7NU8tWE")
 
     # This horizontal selector stays available when the sidebar is collapsed.
-    st.markdown('<div class="sidebar-section-heading">Browse the Hub</div>', unsafe_allow_html=True)
+    st.markdown('<div class="top-nav-heading">Browse the Hub</div>', unsafe_allow_html=True)
     st.radio(
         "Browse the Hub",
         list(PAGES),
