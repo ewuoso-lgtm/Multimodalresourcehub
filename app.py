@@ -2332,6 +2332,17 @@ def main():
     st.session_state.setdefault("nav", "Home")
     st.session_state.setdefault("top_nav", st.session_state["nav"])
 
+    # Keep reading preferences visible before login and on the welcome screen.
+    with st.sidebar:
+        st.markdown('<div class="sidebar-section-heading">Reading preferences</div>', unsafe_allow_html=True)
+        st.slider(
+            "Adjust text size (px)",
+            min_value=14,
+            max_value=32,
+            value=18,
+            key="site_text_size",
+        )
+
     # A read-only project share link may be viewed without signing in.
     projects.handle_shared_link()
 
@@ -2378,16 +2389,6 @@ def main():
             format_func=lambda page: f"{page_icons[page]}  {page}",
             label_visibility="collapsed",
             on_change=sync_sidebar_navigation,
-        )
-
-        st.divider()
-        st.markdown('<div class="sidebar-section-heading">Reading preferences</div>', unsafe_allow_html=True)
-        st.slider(
-            "Adjust text size (px)",
-            min_value=14,
-            max_value=32,
-            value=18,
-            key="site_text_size",
         )
 
         st.divider()
