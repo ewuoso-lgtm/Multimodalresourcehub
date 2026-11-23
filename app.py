@@ -2315,7 +2315,20 @@ def sync_top_navigation():
 
 
 def main():
+    st.session_state.setdefault("site_text_size", 18)
     st.markdown(CSS, unsafe_allow_html=True)
+    st.markdown(
+        f"""
+        <style>
+        [data-testid="stMain"] [data-testid="stMarkdownContainer"] p,
+        [data-testid="stMain"] [data-testid="stMarkdownContainer"] li {{
+            font-size: {st.session_state["site_text_size"]}px !important;
+            line-height: 1.6 !important;
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
     st.session_state.setdefault("nav", "Home")
     st.session_state.setdefault("top_nav", st.session_state["nav"])
 
@@ -2365,6 +2378,16 @@ def main():
             format_func=lambda page: f"{page_icons[page]}  {page}",
             label_visibility="collapsed",
             on_change=sync_sidebar_navigation,
+        )
+
+        st.divider()
+        st.markdown('<div class="sidebar-section-heading">Reading preferences</div>', unsafe_allow_html=True)
+        st.slider(
+            "Adjust text size (px)",
+            min_value=14,
+            max_value=32,
+            value=18,
+            key="site_text_size",
         )
 
         st.divider()
