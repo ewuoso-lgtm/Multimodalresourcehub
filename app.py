@@ -19,6 +19,8 @@ import io
 import re
 import time
 import zipfile
+from datetime import datetime
+from zoneinfo import ZoneInfo
 from pathlib import Path
 
 import streamlit as st
@@ -2299,6 +2301,19 @@ def show_welcome_splash():
     render_copyright_footer()
 
 
+def time_based_greeting():
+    """Return a greeting based on the current time in Central Time."""
+    hour = datetime.now(ZoneInfo("America/Chicago")).hour
+
+    if 5 <= hour < 12:
+        return "Good morning"
+    if 12 <= hour < 17:
+        return "Good afternoon"
+    if 17 <= hour < 21:
+        return "Good evening"
+    return "Good night"
+
+
 def set_tutorial_visibility(state_key, is_visible):
     """Set whether a tutorial video is shown."""
     st.session_state[state_key] = is_visible
@@ -2358,6 +2373,13 @@ def main():
     # Accounts: signed-out visitors see sign up / log in, new users see the tutorial, and the script
     # stops inside this call until they are done. Everything below runs only for signed-in users.
     user = auth.require_login()
+    user_name = user.get("display_name") or user.get("username") or "there"
+
+    # Show the greeting once after login for this user.
+    if st.session_state.get("greeted_user") != user_name:
+        st.markdown(f"### {time_based_greeting()}, {html.escape(user_name)}!")
+        st.session_state["greeted_user"] = user_name
+
     projects.redeem_pending_share(user)
 
     with st.sidebar:
