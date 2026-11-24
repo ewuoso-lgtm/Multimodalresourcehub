@@ -2375,10 +2375,8 @@ def main():
     user = auth.require_login()
     user_name = user.get("display_name") or user.get("username") or "there"
 
-    # Show the greeting once after login for this user.
-    if st.session_state.get("greeted_user") != user_name:
-        st.markdown(f"### {time_based_greeting()}, {html.escape(user_name)}!")
-        st.session_state["greeted_user"] = user_name
+    # Keep the time-based greeting visible at the top of signed-in pages.
+    st.success(f"{time_based_greeting()}, {html.escape(user_name)}!")
 
     projects.redeem_pending_share(user)
 
